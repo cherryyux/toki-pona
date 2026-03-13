@@ -811,14 +811,6 @@
     </div>
     <button class="btn-add" onclick="addWord()">+ add word to deck</button>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;">
-      <button class="btn-add" onclick="exportData()" style="border-color:rgba(0,255,238,0.4);color:var(--neon-cyan);background:rgba(0,255,238,0.05);">↓ save my words</button>
-      <label class="btn-add" style="border-color:rgba(255,153,0,0.4);color:var(--neon-orange);background:rgba(255,153,0,0.05);text-align:center;cursor:pointer;margin-top:0;">
-        ↑ load my words
-        <input type="file" accept=".json" onchange="importData(event)" style="display:none;" />
-      </label>
-    </div>
-
     <!-- Word-only flashcard deck -->
     <div id="wordDeckArea" style="margin-top:28px;display:none;">
       <div class="progress-wrap">
