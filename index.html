@@ -1169,7 +1169,10 @@
       item.innerHTML = `
         <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
           <span class="word-item-toki" style="font-size:0.8rem;">${s.toki}</span>
-          <button class="btn-delete" onclick="deleteSentence('${s.id}')">✕</button>
+          <span style="display:flex;gap:4px;">
+            <button class="btn-delete" title="edit" onclick="editSentence('${s.id}')" style="color:var(--neon-cyan);">✎</button>
+            <button class="btn-delete" onclick="deleteSentence('${s.id}')">✕</button>
+          </span>
         </div>
         <span class="word-item-en" style="font-size:0.72rem;">${s.translation}</span>
       `;
@@ -1231,6 +1234,35 @@
     }
   }
 
+  function editSentence(id) {
+    const s = sentences.find(s => s.id === id);
+    if (!s) return;
+    document.getElementById('inputSentenceToki').value = s.toki;
+    document.getElementById('inputSentenceEn').value = s.translation;
+    const btn = document.querySelector('#sentencesSection .btn-add');
+    btn.textContent = `✎ update sentence`;
+    btn.onclick = () => updateSentence(id);
+    document.getElementById('inputSentenceEn').focus();
+    showToast('editing sentence — update and save!');
+  }
+
+  async function updateSentence(id) {
+    const toki = document.getElementById('inputSentenceToki').value.trim();
+    const translation = document.getElementById('inputSentenceEn').value.trim();
+    if (!toki || !translation) { showToast('fill in both fields!'); return; }
+    await sb.from('sentences').update({ toki, translation }).eq('id', id);
+    const s = sentences.find(s => s.id === id);
+    if (s) { s.toki = toki; s.translation = translation; }
+    document.getElementById('inputSentenceToki').value = '';
+    document.getElementById('inputSentenceEn').value = '';
+    const btn = document.querySelector('#sentencesSection .btn-add');
+    btn.textContent = '+ add sentence';
+    btn.onclick = addSentence;
+    renderSentenceList();
+    initSentenceDeck();
+    showToast('sentence updated! 🌱');
+  }
+
   function sentAnswer(didKnow) { if (didKnow) sentKnown++; sentIndex++; updateSentenceCard(); }
   function nextSentence() { sentIndex++; updateSentenceCard(); }
   function restartSentences() { initSentenceDeck(); }
@@ -1277,13 +1309,48 @@
       item.innerHTML = `
         <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
           <span class="word-item-toki" style="font-size:0.78rem;color:var(--neon-yellow);white-space:pre-wrap;">${r.rule}</span>
-          <button class="btn-delete" onclick="deleteGrammar('${r.id}')">✕</button>
+          <span style="display:flex;gap:4px;">
+            <button class="btn-delete" title="edit" onclick="editGrammar('${r.id}')" style="color:var(--neon-cyan);">✎</button>
+            <button class="btn-delete" onclick="deleteGrammar('${r.id}')">✕</button>
+          </span>
         </div>
         <span class="word-item-en" style="font-size:0.72rem;white-space:pre-wrap;">${r.translation}</span>
       `;
       list.appendChild(item);
     });
     document.getElementById('grammarDeckArea').style.display = rules.length > 0 ? 'block' : 'none';
+  }
+
+  function editGrammar(id) {
+    const r = rules.find(r => r.id === id);
+    if (!r) return;
+    document.getElementById('inputRuleText').value = r.rule;
+    document.getElementById('inputRuleExample').value = r.example || '';
+    document.getElementById('inputRuleTranslation').value = r.translation;
+    const btn = document.querySelector('#grammarSection .btn-add');
+    btn.textContent = `✎ update grammar card`;
+    btn.onclick = () => updateGrammar(id);
+    document.getElementById('inputRuleTranslation').focus();
+    showToast('editing grammar card — update and save!');
+  }
+
+  async function updateGrammar(id) {
+    const rule = document.getElementById('inputRuleText').value.trim();
+    const example = document.getElementById('inputRuleExample').value.trim();
+    const translation = document.getElementById('inputRuleTranslation').value.trim();
+    if (!rule || !translation) { showToast('fill in rule and translation!'); return; }
+    await sb.from('rules').update({ rule, example, translation }).eq('id', id);
+    const r = rules.find(r => r.id === id);
+    if (r) { r.rule = rule; r.example = example; r.translation = translation; }
+    document.getElementById('inputRuleText').value = '';
+    document.getElementById('inputRuleExample').value = '';
+    document.getElementById('inputRuleTranslation').value = '';
+    const btn = document.querySelector('#grammarSection .btn-add');
+    btn.textContent = '+ add grammar card';
+    btn.onclick = addGrammar;
+    renderGrammarList();
+    initGrammarDeck();
+    showToast('grammar card updated! 🌱');
   }
 
   function initGrammarDeck() {
