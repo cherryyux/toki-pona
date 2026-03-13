@@ -578,7 +578,7 @@
     <button class="tab active" onclick="switchTab('flash')">⚡ Flash</button>
     <button class="tab" onclick="switchTab('quiz')">🎯 Quiz</button>
     <button class="tab" onclick="switchTab('sentences')">💬 Sentences</button>
-    <button class="tab" onclick="switchTab('rules')">📖 Rules</button>
+    <button class="tab" onclick="switchTab('grammar')">📖 Grammar</button>
     <button class="tab" onclick="switchTab('add')">＋ Words</button>
   </div>
 
@@ -729,58 +729,63 @@
   </div>
 
   <!-- RULES MODE -->
-  <div class="add-section" id="rulesSection">
+  <div class="add-section" id="grammarSection">
 
     <div class="input-group">
-      <label class="input-label">rule + example</label>
-      <textarea class="input-field" id="inputRuleText" placeholder="e.g. Use 'e' to mark the direct object&#10;mi moku e telo" rows="3" style="resize:none;line-height:1.5;"></textarea>
+      <label class="input-label">grammar rule</label>
+      <input class="input-field" id="inputRuleText" placeholder="e.g. Use 'e' to mark the direct object" />
+    </div>
+    <div class="input-group">
+      <label class="input-label">example sentence / word</label>
+      <input class="input-field" id="inputRuleExample" placeholder="e.g. mi moku e telo" />
     </div>
     <div class="input-group">
       <label class="input-label">translation / explanation</label>
-      <textarea class="input-field" id="inputRuleTranslation" placeholder="e.g. I drink water&#10;'e' comes after the verb" rows="3" style="resize:none;line-height:1.5;"></textarea>
+      <input class="input-field" id="inputRuleTranslation" placeholder="e.g. I drink water — 'e' comes after the verb" />
     </div>
-    <button class="btn-add" onclick="addRule()" style="border-color:rgba(255,230,0,0.4);color:var(--neon-yellow);background:rgba(255,230,0,0.05);">+ add rule</button>
+    <button class="btn-add" onclick="addGrammar()" style="border-color:rgba(255,230,0,0.4);color:var(--neon-yellow);background:rgba(255,230,0,0.05);">+ add rule</button>
 
-    <div id="ruleDeckArea" style="margin-top:28px; display:none;">
+    <div id="grammarDeckArea" style="margin-top:28px; display:none;">
       <div class="progress-wrap">
         <div class="progress-info">
-          <span id="ruleProgressText">rule 1 of 1</span>
-          <span id="ruleKnownCount">0 known</span>
+          <span id="grammarProgressText">rule 1 of 1</span>
+          <span id="grammarKnownCount">0 known</span>
         </div>
-        <div class="progress-bar"><div class="progress-fill" id="ruleProgressFill" style="width:0%;background:linear-gradient(90deg,var(--neon-yellow),var(--neon-orange));"></div></div>
+        <div class="progress-bar"><div class="progress-fill" id="grammarProgressFill" style="width:0%;background:linear-gradient(90deg,var(--neon-yellow),var(--neon-orange));"></div></div>
       </div>
 
-      <div class="card-scene" onclick="flipRule()" id="ruleCardScene">
-        <div class="card-inner" id="ruleCardInner">
+      <div class="card-scene" onclick="flipGrammar()" id="grammarCardScene">
+        <div class="card-inner" id="grammarCardInner">
           <div class="card-face card-front" style="border-color:rgba(255,230,0,0.2);box-shadow:0 0 30px rgba(255,230,0,0.05);">
-            <div class="card-label">rule + example</div>
-            <div class="card-word" id="ruleCardText" style="color:var(--neon-yellow);text-shadow:0 0 20px var(--neon-yellow);font-size:clamp(1rem,3.5vw,1.5rem);line-height:1.5;white-space:pre-wrap;"></div>
-            <div class="card-hint">tap to reveal translation</div>
+            <div class="card-label">grammar</div>
+            <div class="card-word" id="grammarCardText" style="color:var(--neon-yellow);text-shadow:0 0 20px var(--neon-yellow);font-size:clamp(1rem,3.5vw,1.5rem);line-height:1.5;white-space:pre-wrap;"></div>
+            <div id="grammarCardExample" style="margin-top:12px;color:var(--neon-orange);font-family:'Space Mono',monospace;font-size:clamp(0.85rem,3vw,1.1rem);font-style:italic;opacity:0.85;"></div>
+            <div class="card-hint" style="margin-top:12px;">tap to reveal translation</div>
           </div>
           <div class="card-face card-back" style="border-color:rgba(255,153,0,0.2);box-shadow:0 0 30px rgba(255,153,0,0.05);">
             <div class="card-label">translation / explanation</div>
-            <div class="card-word" id="ruleCardTranslation" style="color:var(--neon-orange);text-shadow:0 0 20px var(--neon-orange);font-size:clamp(1rem,3.5vw,1.5rem);line-height:1.5;white-space:pre-wrap;"></div>
+            <div class="card-word" id="grammarCardTranslation" style="color:var(--neon-orange);text-shadow:0 0 20px var(--neon-orange);font-size:clamp(1rem,3.5vw,1.5rem);line-height:1.5;white-space:pre-wrap;"></div>
           </div>
         </div>
       </div>
 
-      <div class="flip-hint" id="ruleFlipHint">↑ tap card to flip ↑</div>
+      <div class="flip-hint" id="grammarFlipHint">↑ tap card to flip ↑</div>
 
-      <div class="answer-btns" id="ruleAnswerBtns" style="display:none">
-        <button class="btn btn-dontknow" onclick="ruleAnswer(false)">✗ still learning</button>
-        <button class="btn btn-know" onclick="ruleAnswer(true)">✓ i know it</button>
+      <div class="answer-btns" id="grammarAnswerBtns" style="display:none">
+        <button class="btn btn-dontknow" onclick="grammarAnswer(false)">✗ still learning</button>
+        <button class="btn btn-know" onclick="grammarAnswer(true)">✓ i know it</button>
       </div>
-      <button class="btn-next" onclick="nextRule()" id="ruleSkipBtn">skip →</button>
+      <button class="btn-next" onclick="nextGrammar()" id="grammarSkipBtn">skip →</button>
 
-      <div class="completion" id="ruleCompletion" style="border-color:rgba(255,230,0,0.2);">
+      <div class="completion" id="grammarCompletion" style="border-color:rgba(255,230,0,0.2);">
         <div class="completion-emoji">📖</div>
         <div class="completion-title" style="color:var(--neon-yellow);text-shadow:0 0 20px var(--neon-yellow);">pona!</div>
-        <div class="completion-sub" id="ruleCompletionSub"></div>
-        <button class="btn-restart" onclick="restartRules()" style="border-color:rgba(255,230,0,0.4);color:var(--neon-yellow);">start over</button>
+        <div class="completion-sub" id="grammarCompletionSub"></div>
+        <button class="btn-restart" onclick="restartGrammar()" style="border-color:rgba(255,230,0,0.4);color:var(--neon-yellow);">start over</button>
       </div>
     </div>
 
-    <div class="word-list" id="ruleList" style="margin-top:20px;"></div>
+    <div class="word-list" id="grammarList" style="margin-top:20px;"></div>
   </div>
 
   <!-- ADD WORDS MODE -->
@@ -893,7 +898,7 @@
     initDeck();
     renderWordList();
     renderSentenceList();
-    renderRuleList();
+    renderGrammarList();
     showToast(`loaded ${words.length} words & ${sentences.length} sentences 🌱`);
   }
 
@@ -1240,34 +1245,36 @@
 
   // ── RULES ───────────────────────────────────────────────
   let rules = [];
-  let ruleDeck = [];
-  let ruleIndex = 0;
-  let ruleKnown = 0;
-  let ruleFlipped = false;
+  let grammarDeck = [];
+  let grammarIndex = 0;
+  let grammarKnown = 0;
+  let grammarFlipped = false;
 
-  async function addRule() {
+  async function addGrammar() {
     const rule = document.getElementById('inputRuleText').value.trim();
+    const example = document.getElementById('inputRuleExample').value.trim();
     const translation = document.getElementById('inputRuleTranslation').value.trim();
-    if (!rule || !translation) { showToast('fill in both fields!'); return; }
-    const { data, error } = await sb.from('rules').insert({ rule, example: '', translation }).select().single();
+    if (!rule || !translation) { showToast('fill in rule and translation!'); return; }
+    const { data, error } = await sb.from('rules').insert({ rule, example, translation }).select().single();
     if (error) { showToast('error saving rule 😕'); return; }
     rules.push(data);
     document.getElementById('inputRuleText').value = '';
+    document.getElementById('inputRuleExample').value = '';
     document.getElementById('inputRuleTranslation').value = '';
-    renderRuleList();
-    initRuleDeck();
-    showToast('rule saved! 🌱');
+    renderGrammarList();
+    initGrammarDeck();
+    showToast('grammar rule saved! 🌱');
   }
 
-  async function deleteRule(id) {
+  async function deleteGrammar(id) {
     await sb.from('rules').delete().eq('id', id);
     rules = rules.filter(r => r.id !== id);
-    renderRuleList();
-    initRuleDeck();
+    renderGrammarList();
+    initGrammarDeck();
   }
 
-  function renderRuleList() {
-    const list = document.getElementById('ruleList');
+  function renderGrammarList() {
+    const list = document.getElementById('grammarList');
     list.innerHTML = '';
     [...rules].reverse().forEach(r => {
       const item = document.createElement('div');
@@ -1278,71 +1285,72 @@
       item.innerHTML = `
         <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
           <span class="word-item-toki" style="font-size:0.78rem;color:var(--neon-yellow);white-space:pre-wrap;">${r.rule}</span>
-          <button class="btn-delete" onclick="deleteRule('${r.id}')">✕</button>
+          <button class="btn-delete" onclick="deleteGrammar('${r.id}')">✕</button>
         </div>
         <span class="word-item-en" style="font-size:0.72rem;white-space:pre-wrap;">${r.translation}</span>
       `;
       list.appendChild(item);
     });
-    document.getElementById('ruleDeckArea').style.display = rules.length > 0 ? 'block' : 'none';
+    document.getElementById('grammarDeckArea').style.display = rules.length > 0 ? 'block' : 'none';
   }
 
-  function initRuleDeck() {
+  function initGrammarDeck() {
     if (rules.length === 0) return;
-    ruleDeck = shuffle(rules);
-    ruleIndex = 0;
-    ruleKnown = 0;
-    ruleFlipped = false;
-    document.getElementById('ruleCompletion').classList.remove('show');
-    document.getElementById('ruleCardScene').style.display = '';
-    document.getElementById('ruleFlipHint').style.display = '';
-    document.getElementById('ruleSkipBtn').style.display = '';
-    updateRuleCard();
+    grammarDeck = shuffle(rules);
+    grammarIndex = 0;
+    grammarKnown = 0;
+    grammarFlipped = false;
+    document.getElementById('grammarCompletion').classList.remove('show');
+    document.getElementById('grammarCardScene').style.display = '';
+    document.getElementById('grammarFlipHint').style.display = '';
+    document.getElementById('grammarSkipBtn').style.display = '';
+    updateGrammarCard();
   }
 
-  function updateRuleCard() {
-    if (ruleIndex >= ruleDeck.length) {
-      document.getElementById('ruleCardScene').style.display = 'none';
-      document.getElementById('ruleFlipHint').style.display = 'none';
-      document.getElementById('ruleSkipBtn').style.display = 'none';
-      document.getElementById('ruleAnswerBtns').style.display = 'none';
-      const pct = Math.round(ruleKnown / ruleDeck.length * 100);
-      document.getElementById('ruleCompletionSub').textContent = `you knew ${ruleKnown} of ${ruleDeck.length} rules — ${pct}%`;
-      document.getElementById('ruleCompletion').classList.add('show');
-      document.getElementById('ruleProgressFill').style.width = '100%';
+  function updateGrammarCard() {
+    if (grammarIndex >= grammarDeck.length) {
+      document.getElementById('grammarCardScene').style.display = 'none';
+      document.getElementById('grammarFlipHint').style.display = 'none';
+      document.getElementById('grammarSkipBtn').style.display = 'none';
+      document.getElementById('grammarAnswerBtns').style.display = 'none';
+      const pct = Math.round(grammarKnown / grammarDeck.length * 100);
+      document.getElementById('grammarCompletionSub').textContent = `you knew ${grammarKnown} of ${grammarDeck.length} grammar cards — ${pct}%`;
+      document.getElementById('grammarCompletion').classList.add('show');
+      document.getElementById('grammarProgressFill').style.width = '100%';
       return;
     }
-    const r = ruleDeck[ruleIndex];
-    document.getElementById('ruleCardText').textContent = r.rule;
-    document.getElementById('ruleCardTranslation').textContent = r.translation;
-    document.getElementById('ruleCardInner').classList.remove('flipped');
-    document.getElementById('ruleAnswerBtns').style.display = 'none';
-    document.getElementById('ruleSkipBtn').style.display = '';
-    document.getElementById('ruleFlipHint').style.display = '';
-    ruleFlipped = false;
-    document.getElementById('ruleProgressFill').style.width = (ruleIndex / ruleDeck.length * 100) + '%';
-    document.getElementById('ruleProgressText').textContent = `rule ${ruleIndex + 1} of ${ruleDeck.length}`;
-    document.getElementById('ruleKnownCount').textContent = `${ruleKnown} known`;
+    const r = grammarDeck[grammarIndex];
+    document.getElementById('grammarCardText').textContent = r.rule;
+    document.getElementById('grammarCardExample').textContent = r.example || '';
+    document.getElementById('grammarCardTranslation').textContent = r.translation;
+    document.getElementById('grammarCardInner').classList.remove('flipped');
+    document.getElementById('grammarAnswerBtns').style.display = 'none';
+    document.getElementById('grammarSkipBtn').style.display = '';
+    document.getElementById('grammarFlipHint').style.display = '';
+    grammarFlipped = false;
+    document.getElementById('grammarProgressFill').style.width = (grammarIndex / grammarDeck.length * 100) + '%';
+    document.getElementById('grammarProgressText').textContent = `grammar ${grammarIndex + 1} of ${grammarDeck.length}`;
+    document.getElementById('grammarKnownCount').textContent = `${grammarKnown} known`;
   }
 
-  function flipRule() {
-    if (ruleIndex >= ruleDeck.length) return;
-    ruleFlipped = !ruleFlipped;
-    document.getElementById('ruleCardInner').classList.toggle('flipped', ruleFlipped);
-    if (ruleFlipped) {
-      document.getElementById('ruleAnswerBtns').style.display = 'grid';
-      document.getElementById('ruleSkipBtn').style.display = 'none';
-      document.getElementById('ruleFlipHint').style.display = 'none';
+  function flipGrammar() {
+    if (grammarIndex >= grammarDeck.length) return;
+    grammarFlipped = !grammarFlipped;
+    document.getElementById('grammarCardInner').classList.toggle('flipped', grammarFlipped);
+    if (grammarFlipped) {
+      document.getElementById('grammarAnswerBtns').style.display = 'grid';
+      document.getElementById('grammarSkipBtn').style.display = 'none';
+      document.getElementById('grammarFlipHint').style.display = 'none';
     } else {
-      document.getElementById('ruleAnswerBtns').style.display = 'none';
-      document.getElementById('ruleSkipBtn').style.display = '';
-      document.getElementById('ruleFlipHint').style.display = '';
+      document.getElementById('grammarAnswerBtns').style.display = 'none';
+      document.getElementById('grammarSkipBtn').style.display = '';
+      document.getElementById('grammarFlipHint').style.display = '';
     }
   }
 
-  function ruleAnswer(didKnow) { if (didKnow) ruleKnown++; ruleIndex++; updateRuleCard(); }
-  function nextRule() { ruleIndex++; updateRuleCard(); }
-  function restartRules() { initRuleDeck(); }
+  function grammarAnswer(didKnow) { if (didKnow) grammarKnown++; grammarIndex++; updateGrammarCard(); }
+  function nextGrammar() { grammarIndex++; updateGrammarCard(); }
+  function restartGrammar() { initGrammarDeck(); }
 
   // ── WORD-ONLY DECK ──────────────────────────────────────
   let wordDeck = [];
@@ -1444,17 +1452,17 @@
   // ── TABS ────────────────────────────────────────────────
   function switchTab(tab) {
     document.querySelectorAll('.tab').forEach((t, i) => {
-      t.classList.toggle('active', ['flash','quiz','sentences','rules','add'][i] === tab);
+      t.classList.toggle('active', ['flash','quiz','sentences','grammar','add'][i] === tab);
     });
     document.getElementById('flashSection').classList.toggle('hidden', tab !== 'flash');
     document.getElementById('quizSection').style.display = tab === 'quiz' ? 'block' : 'none';
     document.getElementById('sentencesSection').style.display = tab === 'sentences' ? 'block' : 'none';
-    document.getElementById('rulesSection').style.display = tab === 'rules' ? 'block' : 'none';
+    document.getElementById('grammarSection').style.display = tab === 'grammar' ? 'block' : 'none';
     document.getElementById('addSection').style.display = tab === 'add' ? 'block' : 'none';
     if (tab === 'quiz') initQuiz();
     if (tab === 'add') { renderWordList(); if (words.length > 0) initWordDeck(); }
     if (tab === 'sentences') { renderSentenceList(); if (sentences.length > 0) initSentenceDeck(); }
-    if (tab === 'rules') { renderRuleList(); if (rules.length > 0) initRuleDeck(); }
+    if (tab === 'grammar') { renderGrammarList(); if (rules.length > 0) initGrammarDeck(); }
     randomGridColor();
   }
 
