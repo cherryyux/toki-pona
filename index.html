@@ -814,6 +814,43 @@
       </label>
     </div>
 
+    <!-- Word-only flashcard deck -->
+    <div id="wordDeckArea" style="margin-top:28px;display:none;">
+      <div class="progress-wrap">
+        <div class="progress-info">
+          <span id="wordDeckProgressText">word 1 of 1</span>
+          <span id="wordDeckKnownCount">0 known</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="wordDeckProgressFill" style="width:0%"></div></div>
+      </div>
+      <div class="card-scene" onclick="flipWordDeck()" id="wordDeckCardScene">
+        <div class="card-inner" id="wordDeckCardInner">
+          <div class="card-face card-front">
+            <div class="card-label">toki pona</div>
+            <div class="card-word" id="wordDeckFront"></div>
+            <div class="card-hint">tap to reveal meaning</div>
+          </div>
+          <div class="card-face card-back">
+            <div class="card-label">english</div>
+            <div class="card-word" id="wordDeckBack" style="color:var(--neon-cyan);text-shadow:0 0 20px var(--neon-cyan);font-size:clamp(1.6rem,6vw,2.4rem);"></div>
+            <div class="card-category" id="wordDeckCategory"></div>
+          </div>
+        </div>
+      </div>
+      <div class="flip-hint" id="wordDeckFlipHint">↑ tap card to flip ↑</div>
+      <div class="answer-btns" id="wordDeckAnswerBtns" style="display:none">
+        <button class="btn btn-dontknow" onclick="wordDeckAnswer(false)">✗ still learning</button>
+        <button class="btn btn-know" onclick="wordDeckAnswer(true)">✓ i know it</button>
+      </div>
+      <button class="btn-next" onclick="nextWordDeck()" id="wordDeckSkipBtn">skip →</button>
+      <div class="completion" id="wordDeckCompletion">
+        <div class="completion-emoji">🌟</div>
+        <div class="completion-title">pona!</div>
+        <div class="completion-sub" id="wordDeckCompletionSub"></div>
+        <button class="btn-restart" onclick="restartWordDeck()">start over</button>
+      </div>
+    </div>
+
     <div class="word-list" id="wordList"></div>
   </div>
 
@@ -862,12 +899,17 @@
 
   // ── FLASHCARD ───────────────────────────────────────────
   function initDeck() {
-    if (words.length === 0) {
+    const allCards = [
+      ...words.map(w => ({ type: 'word', front: w.toki, back: w.meaning, category: w.category })),
+      ...sentences.map(s => ({ type: 'sentence', front: s.toki, back: s.translation, category: 'sentence' })),
+      ...rules.map(r => ({ type: 'rule', front: r.rule, back: r.translation, category: 'rule' })),
+    ];
+    if (allCards.length === 0) {
       document.getElementById('cardScene').style.display = 'none';
       document.getElementById('flipHint').style.display = 'none';
       document.getElementById('skipBtn').style.display = 'none';
       document.getElementById('answerBtns').style.display = 'none';
-      document.getElementById('progressText').textContent = 'no words yet';
+      document.getElementById('progressText').textContent = 'no cards yet';
       document.getElementById('knownCount').textContent = '';
       document.getElementById('statLeft').textContent = '0';
       document.getElementById('completion').classList.remove('show');
@@ -880,7 +922,7 @@
     document.getElementById('cardScene').style.display = '';
     document.getElementById('flipHint').style.display = '';
     document.getElementById('skipBtn').style.display = '';
-    deck = shuffle(words);
+    deck = shuffle(allCards);
     currentIndex = 0;
     known = 0;
     dontKnow = 0;
@@ -893,8 +935,13 @@
   function updateCard() {
     if (currentIndex >= deck.length) { showCompletion(); return; }
     const w = deck[currentIndex];
-    document.getElementById('cardWord').textContent = w.toki;
-    document.getElementById('cardMeaning').textContent = w.meaning;
+    const typeColors = { word: 'var(--neon-green)', sentence: 'var(--neon-orange)', rule: 'var(--neon-yellow)' };
+    document.getElementById('cardWord').textContent = w.front;
+    document.getElementById('cardWord').style.color = typeColors[w.type] || 'var(--neon-green)';
+    document.getElementById('cardWord').style.textShadow = `0 0 20px ${typeColors[w.type]}`;
+    document.getElementById('cardWord').style.fontSize = w.type === 'word' ? 'clamp(2.5rem, 10vw, 4rem)' : 'clamp(1.1rem, 3.5vw, 1.6rem)';
+    document.getElementById('cardWord').style.lineHeight = w.type === 'word' ? '1' : '1.5';
+    document.getElementById('cardMeaning').textContent = w.back;
     document.getElementById('cardCategory').textContent = w.category;
     document.getElementById('cardInner').classList.remove('flipped');
     document.getElementById('answerBtns').style.display = 'none';
@@ -952,8 +999,13 @@
 
   // ── QUIZ ────────────────────────────────────────────────
   function initQuiz() {
-    if (words.length < 4) { showToast('add at least 4 words to quiz!'); return; }
-    quizDeck = shuffle(words);
+    const allCards = [
+      ...words.map(w => ({ front: w.toki, back: w.meaning })),
+      ...sentences.map(s => ({ front: s.toki, back: s.translation })),
+      ...rules.map(r => ({ front: r.rule, back: r.translation })),
+    ];
+    if (allCards.length < 4) { showToast('add at least 4 items to quiz!'); return; }
+    quizDeck = shuffle(allCards);
     quizIndex = 0;
     quizScore = 0;
     document.getElementById('quizCompletion').classList.remove('show');
@@ -963,19 +1015,25 @@
   function showQuizQuestion() {
     if (quizIndex >= quizDeck.length) { showQuizCompletion(); return; }
     const w = quizDeck[quizIndex];
-    document.getElementById('quizWord').textContent = w.toki;
+    const allCards = [
+      ...words.map(w => ({ front: w.toki, back: w.meaning })),
+      ...sentences.map(s => ({ front: s.toki, back: s.translation })),
+      ...rules.map(r => ({ front: r.rule, back: r.translation })),
+    ];
+    document.getElementById('quizWord').textContent = w.front;
+    document.getElementById('quizWord').style.fontSize = w.front.length > 20 ? 'clamp(1rem,3.5vw,1.5rem)' : '';
     document.getElementById('quizProgressText').textContent = `question ${quizIndex + 1} of ${quizDeck.length}`;
     document.getElementById('quizScore').textContent = `score: ${quizScore}`;
     document.getElementById('quizProgressFill').style.width = (quizIndex / quizDeck.length * 100) + '%';
-    const others = shuffle(words.filter(x => x.toki !== w.toki)).slice(0, 3);
+    const others = shuffle(allCards.filter(x => x.front !== w.front)).slice(0, 3);
     const options = shuffle([w, ...others]);
     const container = document.getElementById('quizOptions');
     container.innerHTML = '';
     options.forEach(opt => {
       const btn = document.createElement('button');
       btn.className = 'quiz-opt';
-      btn.textContent = opt.meaning;
-      btn.onclick = () => checkQuizAnswer(btn, opt.toki === w.toki, container);
+      btn.textContent = opt.back;
+      btn.onclick = () => checkQuizAnswer(btn, opt.front === w.front, container);
       container.appendChild(btn);
     });
   }
@@ -986,7 +1044,7 @@
     if (correct) { btn.classList.add('correct'); quizScore++; showToast('pona! ✓'); }
     else {
       btn.classList.add('wrong');
-      btns.forEach(b => { if (b.textContent === quizDeck[quizIndex].meaning) b.classList.add('correct'); });
+      btns.forEach(b => { if (b.textContent === quizDeck[quizIndex].back) b.classList.add('correct'); });
       showToast('ike... keep learning!');
     }
     quizIndex++;
@@ -1286,6 +1344,71 @@
   function nextRule() { ruleIndex++; updateRuleCard(); }
   function restartRules() { initRuleDeck(); }
 
+  // ── WORD-ONLY DECK ──────────────────────────────────────
+  let wordDeck = [];
+  let wordDeckIndex = 0;
+  let wordDeckKnown = 0;
+  let wordDeckFlipped = false;
+
+  function initWordDeck() {
+    if (words.length === 0) { document.getElementById('wordDeckArea').style.display = 'none'; return; }
+    wordDeck = shuffle(words);
+    wordDeckIndex = 0;
+    wordDeckKnown = 0;
+    wordDeckFlipped = false;
+    document.getElementById('wordDeckArea').style.display = 'block';
+    document.getElementById('wordDeckCompletion').classList.remove('show');
+    document.getElementById('wordDeckCardScene').style.display = '';
+    document.getElementById('wordDeckFlipHint').style.display = '';
+    document.getElementById('wordDeckSkipBtn').style.display = '';
+    updateWordDeckCard();
+  }
+
+  function updateWordDeckCard() {
+    if (wordDeckIndex >= wordDeck.length) {
+      document.getElementById('wordDeckCardScene').style.display = 'none';
+      document.getElementById('wordDeckFlipHint').style.display = 'none';
+      document.getElementById('wordDeckSkipBtn').style.display = 'none';
+      document.getElementById('wordDeckAnswerBtns').style.display = 'none';
+      const pct = Math.round(wordDeckKnown / wordDeck.length * 100);
+      document.getElementById('wordDeckCompletionSub').textContent = `you knew ${wordDeckKnown} of ${wordDeck.length} words — ${pct}%`;
+      document.getElementById('wordDeckCompletion').classList.add('show');
+      document.getElementById('wordDeckProgressFill').style.width = '100%';
+      return;
+    }
+    const w = wordDeck[wordDeckIndex];
+    document.getElementById('wordDeckFront').textContent = w.toki;
+    document.getElementById('wordDeckBack').textContent = w.meaning;
+    document.getElementById('wordDeckCategory').textContent = w.category;
+    document.getElementById('wordDeckCardInner').classList.remove('flipped');
+    document.getElementById('wordDeckAnswerBtns').style.display = 'none';
+    document.getElementById('wordDeckSkipBtn').style.display = '';
+    document.getElementById('wordDeckFlipHint').style.display = '';
+    wordDeckFlipped = false;
+    document.getElementById('wordDeckProgressFill').style.width = (wordDeckIndex / wordDeck.length * 100) + '%';
+    document.getElementById('wordDeckProgressText').textContent = `word ${wordDeckIndex + 1} of ${wordDeck.length}`;
+    document.getElementById('wordDeckKnownCount').textContent = `${wordDeckKnown} known`;
+  }
+
+  function flipWordDeck() {
+    if (wordDeckIndex >= wordDeck.length) return;
+    wordDeckFlipped = !wordDeckFlipped;
+    document.getElementById('wordDeckCardInner').classList.toggle('flipped', wordDeckFlipped);
+    if (wordDeckFlipped) {
+      document.getElementById('wordDeckAnswerBtns').style.display = 'grid';
+      document.getElementById('wordDeckSkipBtn').style.display = 'none';
+      document.getElementById('wordDeckFlipHint').style.display = 'none';
+    } else {
+      document.getElementById('wordDeckAnswerBtns').style.display = 'none';
+      document.getElementById('wordDeckSkipBtn').style.display = '';
+      document.getElementById('wordDeckFlipHint').style.display = '';
+    }
+  }
+
+  function wordDeckAnswer(didKnow) { if (didKnow) wordDeckKnown++; wordDeckIndex++; updateWordDeckCard(); }
+  function nextWordDeck() { wordDeckIndex++; updateWordDeckCard(); }
+  function restartWordDeck() { initWordDeck(); }
+
   // ── EXPORT / IMPORT (backup) ────────────────────────────
   function exportData() {
     const data = { words, sentences };
@@ -1329,7 +1452,7 @@
     document.getElementById('rulesSection').style.display = tab === 'rules' ? 'block' : 'none';
     document.getElementById('addSection').style.display = tab === 'add' ? 'block' : 'none';
     if (tab === 'quiz') initQuiz();
-    if (tab === 'add') renderWordList();
+    if (tab === 'add') { renderWordList(); if (words.length > 0) initWordDeck(); }
     if (tab === 'sentences') renderSentenceList();
     if (tab === 'rules') { renderRuleList(); if (rules.length > 0) initRuleDeck(); }
     randomGridColor();
@@ -1344,11 +1467,11 @@
 
   // ── RANDOM GRID COLOR ───────────────────────────────────
   const gridColors = [
-    'rgba(0,255,136,0.08)',   // neon green
-    'rgba(0,255,238,0.08)',   // neon cyan
-    'rgba(255,0,204,0.08)',   // neon pink
-    'rgba(255,153,0,0.08)',   // neon orange
-    'rgba(255,230,0,0.08)',   // neon yellow
+    'rgba(0,255,136,0.06)',   // neon green
+    'rgba(0,255,238,0.06)',   // neon cyan
+    'rgba(255,0,204,0.06)',   // neon pink
+    'rgba(255,153,0,0.06)',   // neon orange
+    'rgba(255,230,0,0.06)',   // neon yellow
   ];
 
   function randomGridColor() {
