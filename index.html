@@ -491,7 +491,7 @@
     font-size: 0.75rem;
   }
 
-  .word-item-toki { color: var(--neon-green); font-weight: 700; }
+  .word-item-toki { color: var(--neon-pink); font-weight: 700; }
   .word-item-en { color: var(--muted2); }
 
   .btn-delete {
@@ -824,7 +824,7 @@
         <div class="card-inner" id="wordDeckCardInner">
           <div class="card-face card-front">
             <div class="card-label">toki pona</div>
-            <div class="card-word" id="wordDeckFront"></div>
+            <div class="card-word" id="wordDeckFront" style="color:var(--neon-pink);text-shadow:0 0 20px var(--neon-pink);"></div>
             <div class="card-hint">tap to reveal meaning</div>
           </div>
           <div class="card-face card-back">
@@ -932,7 +932,7 @@
   function updateCard() {
     if (currentIndex >= deck.length) { showCompletion(); return; }
     const w = deck[currentIndex];
-    const typeColors = { word: 'var(--neon-green)', sentence: 'var(--neon-orange)', rule: 'var(--neon-yellow)' };
+    const typeColors = { word: 'var(--neon-pink)', sentence: 'var(--neon-orange)', rule: 'var(--neon-yellow)' };
     document.getElementById('cardWord').textContent = w.front;
     document.getElementById('cardWord').style.color = typeColors[w.type] || 'var(--neon-green)';
     document.getElementById('cardWord').style.textShadow = `0 0 20px ${typeColors[w.type]}`;
