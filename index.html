@@ -40,8 +40,8 @@
     position: fixed;
     inset: 0;
     background-image:
-      linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
+      linear-gradient(var(--grid-color) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
     background-size: 40px 40px;
     pointer-events: none;
     z-index: 0;
@@ -1332,6 +1332,7 @@
     if (tab === 'add') renderWordList();
     if (tab === 'sentences') renderSentenceList();
     if (tab === 'rules') { renderRuleList(); if (rules.length > 0) initRuleDeck(); }
+    randomGridColor();
   }
 
   function showToast(msg) {
@@ -1341,7 +1342,22 @@
     setTimeout(() => t.classList.remove('show'), 2500);
   }
 
+  // ── RANDOM GRID COLOR ───────────────────────────────────
+  const gridColors = [
+    'rgba(0,255,136,0.06)',   // neon green
+    'rgba(0,255,238,0.06)',   // neon cyan
+    'rgba(255,0,204,0.06)',   // neon pink
+    'rgba(255,153,0,0.06)',   // neon orange
+    'rgba(255,230,0,0.06)',   // neon yellow
+  ];
+
+  function randomGridColor() {
+    const color = gridColors[Math.floor(Math.random() * gridColors.length)];
+    document.documentElement.style.setProperty('--grid-color', color);
+  }
+
   // ── INIT ────────────────────────────────────────────────
+  randomGridColor();
   loadAll();
 </script>
 </body>
