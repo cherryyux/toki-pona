@@ -1453,7 +1453,7 @@
     document.getElementById('addSection').style.display = tab === 'add' ? 'block' : 'none';
     if (tab === 'quiz') initQuiz();
     if (tab === 'add') { renderWordList(); if (words.length > 0) initWordDeck(); }
-    if (tab === 'sentences') renderSentenceList();
+    if (tab === 'sentences') { renderSentenceList(); if (sentences.length > 0) initSentenceDeck(); }
     if (tab === 'rules') { renderRuleList(); if (rules.length > 0) initRuleDeck(); }
     randomGridColor();
   }
