@@ -653,29 +653,60 @@
   .toast.show { transform: translateX(-50%) translateY(0); }
 
   @media (max-width: 600px) {
-    body { padding: 8px 8px 70px; min-height: 100dvh; overflow-y: hidden; }
+    html, body {
+      height: 100dvh;
+      overflow: hidden;
+      padding: 0;
+    }
 
-    .app-wrapper { display: flex; flex-direction: column; min-height: calc(100dvh - 80px); }
+    body {
+      padding: 8px 8px 70px;
+      justify-content: flex-start;
+    }
 
-    .flashcard-section { flex: 1; display: flex; flex-direction: column; justify-content: flex-start; }
+    .everything {
+      padding: 0 8px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
 
-    .card-hand-area { height: 55vw; margin-bottom: 8px; margin-top: 8px; flex-shrink: 0; }
+    .app-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
 
-    .hand-card { border-radius: 12px; padding: 6px; }
+    .flashcard-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .card-hand-area {
+      flex: 1;
+      height: auto;
+      min-height: 200px;
+      max-height: 55vw;
+      margin: 8px 0;
+    }
 
     .card-inner { height: 180px; }
     .card-face { padding: 20px; border-radius: 16px; }
-    .card-word { font-size: clamp(1.6rem, 8vw, 2.4rem) !important; }
+    .card-word { font-size: clamp(1.4rem, 7vw, 2rem) !important; }
 
-    .progress-wrap { margin-bottom: 8px; }
+    .progress-wrap { margin-bottom: 6px; flex-shrink: 0; }
     .progress-info { font-size: 0.55rem; }
-    .stats { gap: 12px; margin-top: 12px; }
+    .stats { gap: 12px; margin-top: 8px; flex-shrink: 0; }
     .stat-num { font-size: 0.85rem; }
     .stat-label { font-size: 0.5rem; }
 
     .quiz-options { grid-template-columns: 1fr; }
     .btn, .btn-next { font-size: 0.6rem; padding: 10px; }
-    .answer-btns { gap: 6px; margin-bottom: 10px; }
+    .answer-btns { gap: 6px; margin-bottom: 8px; flex-shrink: 0; }
+    .btn-next { margin-bottom: 8px; }
   }
 
   /* LANDING PAGE */
@@ -1355,11 +1386,11 @@
 
     const count = allRemaining.length;
     const isMobile = window.innerWidth < 600;
-    const visibleCount = Math.min(count, isMobile ? 9 : 15);
-    const radius = isMobile ? window.innerWidth * 0.65 : window.innerWidth * 0.55;
-    const totalArc = isMobile ? 110 : 110;
-    const cardW = isMobile ? 90 : 220;
-    const cardH = isMobile ? 65 : 150;
+    const visibleCount = Math.min(count, isMobile ? 7 : 15);
+    const radius = isMobile ? window.innerWidth * 1.1 : window.innerWidth * 0.55;
+    const totalArc = isMobile ? 80 : 110;
+    const cardW = isMobile ? 70 : 220;
+    const cardH = isMobile ? 50 : 150;
     const typeColors = { word: '#9b6fff', sentence: '#3a6fff', rule: '#c8d0f0' };
 
     // clamp fanOffset
@@ -1391,7 +1422,7 @@
       const angleDeg = -90 - totalArc / 2 + t * totalArc;
       const angleRad = (angleDeg * Math.PI) / 180;
       const tx = Math.cos(angleRad) * radius;
-      const ty = Math.sin(angleRad) * radius + radius;
+      const ty = Math.sin(angleRad) * radius + radius * (isMobile ? 0.85 : 1);
       const rot = angleDeg + 90;
 
       const distFromCenter = Math.abs(t - 0.5) * 2;
