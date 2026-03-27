@@ -45,7 +45,7 @@
     z-index: 0;
   }
 
-  .everything { position: relative; z-index: 1; width: 100%; max-width: 640px; }
+  .everything { position: relative; z-index: 1; width: 100%; max-width: 100%; padding: 0 40px; }
 
   header {
     display: flex;
@@ -120,7 +120,10 @@
 
   /* PROGRESS BAR */
   .progress-wrap {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .progress-info {
@@ -382,7 +385,8 @@
     display: flex;
     justify-content: center;
     gap: 32px;
-    margin-bottom: 28px;
+    margin-top: 16px;
+    margin-bottom: 0;
   }
 
   .stat-box {
@@ -1339,8 +1343,8 @@
     const count = allRemaining.length;
     const isMobile = window.innerWidth < 600;
     const visibleCount = Math.min(count, isMobile ? 9 : 15);
-    const radius = isMobile ? window.innerWidth * 0.65 : Math.min(400, window.innerWidth * 0.85);
-    const totalArc = isMobile ? 110 : 130;
+    const radius = isMobile ? window.innerWidth * 0.65 : window.innerWidth * 0.55;
+    const totalArc = isMobile ? 110 : 110;
     const cardW = isMobile ? 85 : 180;
     const cardH = isMobile ? 60 : 120;
     const typeColors = { word: '#9b6fff', sentence: '#3a6fff', rule: '#c8d0f0' };
