@@ -8,6 +8,13 @@
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
+  .hand-card, .hand-card *, .card-scene, .card-scene * {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  ::selection { background: transparent; }
+
   :root {
     --bg: #030303;
     --card-bg: #0a0a0a;
