@@ -653,23 +653,23 @@
   .toast.show { transform: translateX(-50%) translateY(0); }
 
   @media (max-width: 600px) {
-    body { padding: 12px 12px 90px; }
+    body { padding: 8px 8px 70px; min-height: 100dvh; overflow-y: hidden; }
 
-    .card-hand-area { height: 220px; margin-bottom: 12px; margin-top: 0; }
+    .app-wrapper { display: flex; flex-direction: column; min-height: calc(100dvh - 80px); }
+
+    .flashcard-section { flex: 1; display: flex; flex-direction: column; justify-content: flex-start; }
+
+    .card-hand-area { height: 55vw; margin-bottom: 8px; margin-top: 8px; flex-shrink: 0; }
 
     .hand-card { border-radius: 12px; padding: 6px; }
-    .hc-word { font-size: 1rem; }
-    .hc-meaning { font-size: 0.4rem; }
-    .hc-hint { font-size: 0.32rem; }
-    .hc-label { font-size: 0.35rem; margin-bottom: 4px; }
 
     .card-inner { height: 180px; }
     .card-face { padding: 20px; border-radius: 16px; }
     .card-word { font-size: clamp(1.6rem, 8vw, 2.4rem) !important; }
 
-    .progress-wrap { margin-bottom: 10px; }
+    .progress-wrap { margin-bottom: 8px; }
     .progress-info { font-size: 0.55rem; }
-    .stats { gap: 12px; margin-top: 16px; }
+    .stats { gap: 12px; margin-top: 12px; }
     .stat-num { font-size: 0.85rem; }
     .stat-label { font-size: 0.5rem; }
 
