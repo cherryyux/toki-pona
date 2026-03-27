@@ -34,13 +34,13 @@
     overflow-x: hidden;
   }
 
-  /* background dots */
+  /* background sitelen pona — pona glyph */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background-image: radial-gradient(circle, var(--grid-color) 1px, transparent 1px);
-    background-size: 28px 28px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='48' r='20' fill='none' stroke='%237b8fff' stroke-width='1.8' opacity='0.04'/%3E%3Cpath d='M30 52 Q40 62 50 52' fill='none' stroke='%237b8fff' stroke-width='1.8' stroke-linecap='round' opacity='0.04'/%3E%3Cline x1='28' y1='22' x2='25' y2='14' stroke='%237b8fff' stroke-width='1.8' stroke-linecap='round' opacity='0.04'/%3E%3Cline x1='40' y1='20' x2='40' y2='12' stroke='%237b8fff' stroke-width='1.8' stroke-linecap='round' opacity='0.04'/%3E%3Cline x1='52' y1='22' x2='55' y2='14' stroke='%237b8fff' stroke-width='1.8' stroke-linecap='round' opacity='0.04'/%3E%3C/svg%3E");
+    background-size: 80px 80px;
     pointer-events: none;
     z-index: 0;
   }
@@ -51,14 +51,32 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 36px;
-    gap: 12px;
+    gap: 24px;
+    width: 100%;
   }
 
   .header-center {
     text-align: center;
     flex-shrink: 0;
   }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #d8dce8;
+    text-shadow: 0 0 14px rgba(255,255,255,0.7), 0 0 50px rgba(255,255,255,0.35);
+    line-height: 1;
+  }
+
+  .logo span {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 20px var(--neon-cyan), 0 0 60px rgba(155,111,255,0.3);
+  }
+
+  .tagline { display: none; }
 
   .logo {
     font-family: 'Syne', sans-serif;
@@ -88,7 +106,7 @@
 
   .tab-group, .tab-group-right {
     display: flex;
-    gap: 16px;
+    gap: 24px;
     align-items: center;
   }
 
@@ -97,22 +115,21 @@
     border: none;
     color: var(--muted2);
     font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.12em;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     cursor: pointer;
     transition: color 0.2s;
-    padding: 4px 0;
+    padding: 0;
     user-select: none;
   }
 
   .tab .tab-icon { display: none; }
-
-  .tab:hover { color: var(--text); }
+  .tab:hover { color: #d8dce8; }
 
   .tab.active {
-    color: var(--neon-green);
-    text-shadow: 0 0 10px rgba(123,143,255,0.4);
+    color: #d8dce8;
+    text-shadow: 0 0 10px rgba(232,238,255,0.5);
   }
 
   /* PROGRESS BAR */
@@ -632,33 +649,30 @@
   }
   .toast.show { transform: translateX(-50%) translateY(0); }
 
-  @media (max-width: 480px) {
-    body { padding: 20px 12px 40px; }
+  @media (max-width: 600px) {
+    body { padding: 8px 8px 80px; }
 
-    header { gap: 6px; }
+    .card-hand-area { height: 160px; margin-bottom: 12px; margin-top: 0; }
 
-    .tab { width: 40px; height: 60px; font-size: 0.45rem; gap: 4px; margin-left: -10px; }
-    .tab .tab-icon { font-size: 0.9rem; }
-    .tab-group, .tab-group-right { height: 70px; }
+    .hand-card { border-radius: 10px; padding: 5px; }
+    .hc-word { font-size: 0.75rem; }
+    .hc-meaning { font-size: 0.36rem; }
+    .hc-hint { font-size: 0.3rem; }
+    .hc-label { font-size: 0.32rem; margin-bottom: 3px; }
 
-    .logo { font-size: clamp(1.2rem, 5vw, 1.8rem); }
-    .tagline { font-size: 0.5rem; letter-spacing: 0.12em; }
+    .card-inner { height: 170px; }
+    .card-face { padding: 16px; border-radius: 14px; }
+    .card-word { font-size: clamp(1.4rem, 7vw, 2rem) !important; }
 
-    .card-hand-area { height: 220px; }
-
-    .hand-card { width: 110px; height: 75px; border-radius: 18px; padding: 8px; }
-    .hc-word { font-size: 1rem; }
-    .hc-meaning { font-size: 0.45rem; }
-    .hc-hint { font-size: 0.38rem; }
-    .hc-label { font-size: 0.42rem; }
-
-    .card-inner { height: 200px; }
+    .progress-wrap { margin-bottom: 8px; }
+    .progress-info { font-size: 0.55rem; }
+    .stats { gap: 10px; }
+    .stat-num { font-size: 0.85rem; }
+    .stat-label { font-size: 0.5rem; }
 
     .quiz-options { grid-template-columns: 1fr; }
-
-    .stats { gap: 16px; }
-
-    .btn, .btn-next { font-size: 0.65rem; padding: 12px; }
+    .btn, .btn-next { font-size: 0.6rem; padding: 10px; }
+    .answer-btns { gap: 6px; margin-bottom: 10px; }
   }
 
   /* LANDING PAGE */
@@ -1066,7 +1080,7 @@
     <div class="word-list" id="wordList"></div>
   </div>
 
-  <footer style="position:fixed;bottom:0;left:0;right:0;padding:12px 16px;z-index:100;background:linear-gradient(to top, #030303 60%, transparent);">
+  <footer style="position:fixed;bottom:0;left:0;right:0;padding:16px 28px;z-index:100;background: linear-gradient(to top, #030303 70%, transparent);border-top: 1px solid rgba(255,255,255,0.04);">
     <header>
       <div class="tabs">
         <div class="tab-group">
@@ -1080,9 +1094,9 @@
       </div>
       <div class="tabs">
         <div class="tab-group-right">
-          <button class="tab" onclick="switchTab('sentences')"><span class="tab-icon">💬</span>sent</button>
-          <button class="tab" onclick="switchTab('grammar')"><span class="tab-icon">📖</span>gram</button>
-          <button class="tab" onclick="switchTab('add')"><span class="tab-icon">＋</span>words</button>
+          <button class="tab" onclick="switchTab('sentences')"><span class="tab-icon">💬</span>sentence</button>
+          <button class="tab" onclick="switchTab('grammar')"><span class="tab-icon">📖</span>grammar</button>
+          <button class="tab" onclick="switchTab('add')"><span class="tab-icon">＋</span>word</button>
         </div>
       </div>
     </header>
@@ -1306,11 +1320,12 @@
     if (allRemaining.length === 0) { showCompletion(); return; }
 
     const count = allRemaining.length;
-    const visibleCount = Math.min(count, 15);
-    const radius = Math.min(400, window.innerWidth * 0.85);
-    const totalArc = 130;
-    const cardW = window.innerWidth < 480 ? 110 : 180;
-    const cardH = window.innerWidth < 480 ? 75 : 120;
+    const isMobile = window.innerWidth < 600;
+    const visibleCount = Math.min(count, isMobile ? 7 : 15);
+    const radius = isMobile ? window.innerWidth * 0.55 : Math.min(400, window.innerWidth * 0.85);
+    const totalArc = isMobile ? 90 : 130;
+    const cardW = isMobile ? 75 : 180;
+    const cardH = isMobile ? 55 : 120;
     const typeColors = { word: '#9b6fff', sentence: '#3a6fff', rule: '#c8d0f0' };
 
     for (let i = 0; i < visibleCount; i++) {
