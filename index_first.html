@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>toki pona — flash</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --bg: #030303;
+    --card-bg: #0a0a0a;
+    --border: #1c1c1c;
+    --neon-green: #e8eeff;
+    --neon-cyan: #7b8fff;
+    --neon-pink: #9b6fff;
+    --neon-orange: #3a6fff;
+    --neon-yellow: #c8d0f0;
+    --text: #f0f0f0;
+    --muted: #444;
+    --muted2: #666;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px 60px;
+    overflow-x: hidden;
+  }
+
+  /* background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid-color) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .everything { position: relative; z-index: 1; width: 100%; max-width: 640px; }
+
+  /* HEADER */
+  header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 6vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: var(--neon-green);
+    text-shadow: 0 0 20px var(--neon-green), 0 0 60px rgba(123,143,255,0.3);
+    line-height: 1;
+  }
+
+  .logo span {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 20px var(--neon-cyan), 0 0 60px rgba(155,111,255,0.3);
+  }
+
+  .tagline {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    margin-top: 8px;
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 28px;
+  }
+
+  .tab {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--muted2);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tab.active {
+    background: #111;
+    color: var(--neon-green);
+    box-shadow: 0 0 12px rgba(123,143,255,0.15);
+    border: 1px solid rgba(123,143,255,0.2);
+  }
+
+  /* PROGRESS BAR */
+  .progress-wrap {
+    margin-bottom: 20px;
+  }
+
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.65rem;
+    color: var(--muted2);
+    margin-bottom: 6px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .progress-bar {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--neon-green), var(--neon-cyan));
+    box-shadow: 0 0 8px var(--neon-green);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  /* FLASHCARD */
+  .card-scene {
+    perspective: 1000px;
+    margin-bottom: 20px;
+    cursor: pointer;
+  }
+
+  .card-inner {
+    position: relative;
+    width: 100%;
+    height: 260px;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card-inner.flipped {
+    transform: rotateY(180deg);
+  }
+
+  .card-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    text-align: center;
+  }
+
+  .card-front {
+    border-color: rgba(123,143,255,0.2);
+    box-shadow: 0 0 30px rgba(123,143,255,0.05), inset 0 0 40px rgba(123,143,255,0.02);
+  }
+
+  .card-back {
+    transform: rotateY(180deg);
+    border-color: rgba(155,111,255,0.2);
+    box-shadow: 0 0 30px rgba(155,111,255,0.05), inset 0 0 40px rgba(0,255,238,0.02);
+  }
+
+  .card-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    margin-bottom: 20px;
+  }
+
+  .card-word {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.5rem, 10vw, 4rem);
+    font-weight: 800;
+    color: var(--neon-green);
+    text-shadow: 0 0 20px var(--neon-green);
+    letter-spacing: -1px;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .card-back .card-word {
+    font-size: clamp(1.6rem, 6vw, 2.4rem);
+    color: var(--neon-cyan);
+    text-shadow: 0 0 20px var(--neon-cyan);
+  }
+
+  .card-hint {
+    font-size: 0.72rem;
+    color: var(--muted2);
+    font-style: italic;
+  }
+
+  .card-category {
+    display: inline-block;
+    margin-top: 16px;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(200,208,240,0.3);
+    color: var(--neon-orange);
+  }
+
+  .flip-hint {
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 20px;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  /* KNOW / DON'T KNOW BUTTONS */
+  .answer-btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .btn {
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid;
+    background: transparent;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-know {
+    border-color: rgba(123,143,255,0.3);
+    color: var(--neon-green);
+  }
+  .btn-know:hover {
+    background: rgba(123,143,255,0.08);
+    box-shadow: 0 0 16px rgba(123,143,255,0.2);
+  }
+
+  .btn-dontknow {
+    border-color: rgba(58,111,255,0.3);
+    color: var(--neon-pink);
+  }
+  .btn-dontknow:hover {
+    background: rgba(58,111,255,0.08);
+    box-shadow: 0 0 16px rgba(58,111,255,0.2);
+  }
+
+  .btn-next {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(155,111,255,0.3);
+    background: transparent;
+    color: var(--neon-cyan);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 24px;
+  }
+  .btn-next:hover {
+    background: rgba(155,111,255,0.08);
+    box-shadow: 0 0 16px rgba(155,111,255,0.2);
+  }
+
+  /* STATS ROW */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+
+  .stat-box {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 10px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted2);
+  }
+
+  /* QUIZ MODE */
+  .quiz-section { display: none; }
+  .quiz-section.active { display: block; }
+  .flashcard-section { display: block; }
+  .flashcard-section.hidden { display: none; }
+
+  .quiz-word {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 8vw, 3.5rem);
+    font-weight: 800;
+    color: var(--neon-green);
+    text-shadow: 0 0 20px var(--neon-green);
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .quiz-instruction {
+    text-align: center;
+    font-size: 0.65rem;
+    color: var(--muted2);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .quiz-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .quiz-opt {
+    padding: 16px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  .quiz-opt:hover:not(:disabled) {
+    border-color: rgba(155,111,255,0.4);
+    color: var(--neon-cyan);
+    box-shadow: 0 0 12px rgba(155,111,255,0.1);
+  }
+
+  .quiz-opt.correct {
+    border-color: var(--neon-green);
+    color: var(--neon-green);
+    box-shadow: 0 0 16px rgba(123,143,255,0.3);
+    background: rgba(123,143,255,0.05);
+  }
+
+  .quiz-opt.wrong {
+    border-color: var(--neon-pink);
+    color: var(--neon-pink);
+    background: rgba(58,111,255,0.05);
+  }
+
+  .quiz-opt:disabled { cursor: default; }
+
+  /* ADD WORD */
+  .add-section { display: none; }
+  .add-section.active { display: block; }
+
+  .input-group {
+    margin-bottom: 14px;
+  }
+
+  .input-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .input-field {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .input-field:focus {
+    border-color: rgba(123,143,255,0.4);
+    box-shadow: 0 0 12px rgba(123,143,255,0.1);
+  }
+
+  .select-field {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .btn-add {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(123,143,255,0.4);
+    background: rgba(123,143,255,0.05);
+    color: var(--neon-green);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+
+  .btn-add:hover {
+    background: rgba(123,143,255,0.1);
+    box-shadow: 0 0 20px rgba(123,143,255,0.2);
+  }
+
+  .word-list {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .word-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 0.75rem;
+  }
+
+  .word-item-toki { color: var(--neon-pink); font-weight: 700; }
+  .word-item-en { color: var(--muted2); }
+
+  .btn-delete {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+    padding: 2px 6px;
+  }
+  .btn-delete:hover { color: var(--neon-pink); }
+
+  /* COMPLETION */
+  .completion {
+    text-align: center;
+    padding: 48px 24px;
+    background: var(--card-bg);
+    border: 1px solid rgba(123,143,255,0.2);
+    border-radius: 20px;
+    display: none;
+  }
+
+  .completion.show { display: block; }
+
+  .completion-emoji { font-size: 3rem; margin-bottom: 16px; }
+  .completion-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--neon-green);
+    text-shadow: 0 0 20px var(--neon-green);
+    margin-bottom: 8px;
+  }
+  .completion-sub { color: var(--muted2); font-size: 0.75rem; margin-bottom: 24px; }
+
+  .btn-restart {
+    padding: 14px 32px;
+    border-radius: 12px;
+    border: 1px solid rgba(123,143,255,0.4);
+    background: transparent;
+    color: var(--neon-green);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-restart:hover {
+    background: rgba(123,143,255,0.08);
+    box-shadow: 0 0 20px rgba(123,143,255,0.2);
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: #111;
+    border: 1px solid rgba(123,143,255,0.3);
+    color: var(--neon-green);
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: transform 0.3s ease;
+    z-index: 100;
+    white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<div class="everything">
+
+  <header>
+    <div class="logo">toki<span>pona</span></div>
+    <div class="tagline">your personal flashcard deck · o kama sona!</div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('flash')">⚡ Flash</button>
+    <button class="tab" onclick="switchTab('quiz')">🎯 Quiz</button>
+    <button class="tab" onclick="switchTab('sentences')">💬 Sentences</button>
+    <button class="tab" onclick="switchTab('grammar')">📖 Grammar</button>
+    <button class="tab" onclick="switchTab('add')">＋ Words</button>
+  </div>
+
+  <!-- FLASHCARD MODE -->
+  <div class="flashcard-section" id="flashSection">
+
+    <div class="progress-wrap">
+      <div class="progress-info">
+        <span id="progressText">card 1 of 20</span>
+        <span id="knownCount">0 known</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    </div>
+
+    <div class="stats">
+      <div class="stat-box">
+        <div class="stat-num" id="statKnown" style="color:var(--neon-green)">0</div>
+        <div class="stat-label">know it</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="statDontKnow" style="color:var(--neon-pink)">0</div>
+        <div class="stat-label">learning</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="statLeft" style="color:var(--neon-cyan)">20</div>
+        <div class="stat-label">remaining</div>
+      </div>
+    </div>
+
+    <div id="emptyState" style="text-align:center;padding:48px 24px;background:var(--card-bg);border:1px solid var(--border);border-radius:20px;margin-bottom:20px;">
+      <div style="font-size:2rem;margin-bottom:16px;">🌱</div>
+      <div style="font-family:'Syne',sans-serif;font-size:1.2rem;color:var(--neon-green);margin-bottom:8px;">your deck is empty</div>
+      <div style="font-size:0.72rem;color:var(--muted2);">go to <strong style="color:var(--text)">＋ Words</strong> to add your first words!</div>
+    </div>
+
+    <div class="card-scene" onclick="flipCard()" id="cardScene" style="display:none;">
+      <div class="card-inner" id="cardInner">
+        <div class="card-face card-front">
+          <div class="card-label">toki pona</div>
+          <div class="card-word" id="cardWord">pona</div>
+          <div class="card-hint">tap to reveal meaning</div>
+        </div>
+        <div class="card-face card-back">
+          <div class="card-label">english</div>
+          <div class="card-word" id="cardMeaning">good, simple, peace</div>
+          <div class="card-category" id="cardCategory">adjective</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-hint" id="flipHint">↑ tap card to flip ↑</div>
+
+    <div class="answer-btns" id="answerBtns" style="display:none">
+      <button class="btn btn-dontknow" onclick="answer(false)">✗ still learning</button>
+      <button class="btn btn-know" onclick="answer(true)">✓ i know it</button>
+    </div>
+
+    <button class="btn-next" onclick="nextCard()" id="skipBtn">skip →</button>
+
+    <div class="completion" id="completion">
+      <div class="completion-emoji">🌟</div>
+      <div class="completion-title">pona!</div>
+      <div class="completion-sub" id="completionSub">you reviewed all the cards</div>
+      <button class="btn-restart" onclick="restart()">start over</button>
+    </div>
+
+  </div>
+
+  <!-- QUIZ MODE -->
+  <div class="quiz-section" id="quizSection">
+    <div class="progress-wrap">
+      <div class="progress-info">
+        <span id="quizProgressText">question 1 of 20</span>
+        <span id="quizScore">score: 0</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="quizProgressFill" style="width:0%"></div></div>
+    </div>
+    <div style="background:var(--card-bg);border:1px solid rgba(123,143,255,0.15);border-radius:20px;padding:40px 24px;margin-bottom:20px;text-align:center;">
+      <div class="card-label" style="margin-bottom:16px;">what does this mean?</div>
+      <div class="quiz-word" id="quizWord">pona</div>
+      <div class="quiz-instruction">choose the correct meaning</div>
+    </div>
+    <div class="quiz-options" id="quizOptions"></div>
+    <div class="completion" id="quizCompletion">
+      <div class="completion-emoji">🎯</div>
+      <div class="completion-title">pona!</div>
+      <div class="completion-sub" id="quizCompletionSub"></div>
+      <button class="btn-restart" onclick="restartQuiz()">try again</button>
+    </div>
+  </div>
+
+  <!-- SENTENCES MODE -->
+  <div class="add-section" id="sentencesSection">
+
+    <!-- Add sentence form -->
+    <div class="input-group">
+      <label class="input-label">toki pona sentence</label>
+      <input class="input-field" id="inputSentenceToki" placeholder="e.g. mi moku e telo" />
+    </div>
+    <div class="input-group">
+      <label class="input-label">english translation</label>
+      <input class="input-field" id="inputSentenceEn" placeholder="e.g. I drink water" />
+    </div>
+    <button class="btn-add" onclick="addSentence()">+ add sentence</button>
+
+    <!-- Sentence flashcards -->
+    <div id="sentenceDeckArea" style="margin-top:28px; display:none;">
+      <div class="progress-wrap">
+        <div class="progress-info">
+          <span id="sentProgressText">sentence 1 of 1</span>
+          <span id="sentKnownCount">0 known</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="sentProgressFill" style="width:0%"></div></div>
+      </div>
+
+      <div class="card-scene" onclick="flipSentence()" id="sentCardScene">
+        <div class="card-inner" id="sentCardInner">
+          <div class="card-face card-front" style="border-color:rgba(155,111,255,0.2);box-shadow:0 0 30px rgba(155,111,255,0.05);">
+            <div class="card-label">toki pona</div>
+            <div class="card-word" id="sentCardToki" style="color:var(--neon-orange);text-shadow:0 0 20px var(--neon-orange);font-size:clamp(1.2rem,4vw,1.8rem);line-height:1.3;"></div>
+            <div class="card-hint">tap to reveal translation</div>
+          </div>
+          <div class="card-face card-back" style="border-color:rgba(155,111,255,0.2);box-shadow:0 0 30px rgba(155,111,255,0.05);">
+            <div class="card-label">english</div>
+            <div class="card-word" id="sentCardEn" style="color:var(--neon-yellow);text-shadow:0 0 20px var(--neon-yellow);font-size:clamp(1.2rem,4vw,1.8rem);line-height:1.3;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-hint" id="sentFlipHint">↑ tap card to flip ↑</div>
+
+      <div class="answer-btns" id="sentAnswerBtns" style="display:none">
+        <button class="btn btn-dontknow" onclick="sentAnswer(false)">✗ still learning</button>
+        <button class="btn btn-know" onclick="sentAnswer(true)">✓ i know it</button>
+      </div>
+      <button class="btn-next" onclick="nextSentence()" id="sentSkipBtn">skip →</button>
+
+      <div class="completion" id="sentCompletion">
+        <div class="completion-emoji">💬</div>
+        <div class="completion-title">pona!</div>
+        <div class="completion-sub" id="sentCompletionSub"></div>
+        <button class="btn-restart" onclick="restartSentences()">start over</button>
+      </div>
+    </div>
+
+    <!-- Sentence list -->
+    <div class="word-list" id="sentenceList" style="margin-top:20px;"></div>
+  </div>
+
+  <!-- RULES MODE -->
+  <div class="add-section" id="grammarSection">
+
+    <div class="input-group">
+      <label class="input-label">grammar rule</label>
+      <input class="input-field" id="inputRuleText" placeholder="e.g. Use 'e' to mark the direct object" />
+    </div>
+    <div class="input-group">
+      <label class="input-label">example sentence / word</label>
+      <input class="input-field" id="inputRuleExample" placeholder="e.g. mi moku e telo" />
+    </div>
+    <div class="input-group">
+      <label class="input-label">translation / explanation</label>
+      <input class="input-field" id="inputRuleTranslation" placeholder="e.g. I drink water — 'e' comes after the verb" />
+    </div>
+    <button class="btn-add" onclick="addGrammar()" style="border-color:rgba(155,111,255,0.4);color:var(--neon-yellow);background:rgba(155,111,255,0.05);">+ add rule</button>
+
+    <div id="grammarDeckArea" style="margin-top:28px; display:none;">
+      <div class="progress-wrap">
+        <div class="progress-info">
+          <span id="grammarProgressText">rule 1 of 1</span>
+          <span id="grammarKnownCount">0 known</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="grammarProgressFill" style="width:0%;background:linear-gradient(90deg,var(--neon-yellow),var(--neon-orange));"></div></div>
+      </div>
+
+      <div class="card-scene" onclick="flipGrammar()" id="grammarCardScene">
+        <div class="card-inner" id="grammarCardInner">
+          <div class="card-face card-front" style="border-color:rgba(155,111,255,0.2);box-shadow:0 0 30px rgba(155,111,255,0.05);">
+            <div class="card-label">grammar</div>
+            <div class="card-word" id="grammarCardText" style="color:var(--neon-yellow);text-shadow:0 0 20px var(--neon-yellow);font-size:clamp(1rem,3.5vw,1.5rem);line-height:1.5;white-space:pre-wrap;"></div>
+            <div id="grammarCardExample" style="margin-top:12px;color:var(--neon-orange);font-family:'Space Mono',monospace;font-size:clamp(0.85rem,3vw,1.1rem);font-style:italic;opacity:0.85;"></div>
+            <div class="card-hint" style="margin-top:12px;">tap to reveal translation</div>
+          </div>
+          <div class="card-face card-back" style="border-color:rgba(155,111,255,0.2);box-shadow:0 0 30px rgba(155,111,255,0.05);">
+            <div class="card-label">translation / explanation</div>
+            <div class="card-word" id="grammarCardTranslation" style="color:var(--neon-orange);text-shadow:0 0 20px var(--neon-orange);font-size:clamp(1rem,3.5vw,1.5rem);line-height:1.5;white-space:pre-wrap;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-hint" id="grammarFlipHint">↑ tap card to flip ↑</div>
+
+      <div class="answer-btns" id="grammarAnswerBtns" style="display:none">
+        <button class="btn btn-dontknow" onclick="grammarAnswer(false)">✗ still learning</button>
+        <button class="btn btn-know" onclick="grammarAnswer(true)">✓ i know it</button>
+      </div>
+      <button class="btn-next" onclick="nextGrammar()" id="grammarSkipBtn">skip →</button>
+
+      <div class="completion" id="grammarCompletion" style="border-color:rgba(155,111,255,0.2);">
+        <div class="completion-emoji">📖</div>
+        <div class="completion-title" style="color:var(--neon-yellow);text-shadow:0 0 20px var(--neon-yellow);">pona!</div>
+        <div class="completion-sub" id="grammarCompletionSub"></div>
+        <button class="btn-restart" onclick="restartGrammar()" style="border-color:rgba(155,111,255,0.4);color:var(--neon-yellow);">start over</button>
+      </div>
+    </div>
+
+    <div class="word-list" id="grammarList" style="margin-top:20px;"></div>
+  </div>
+
+  <!-- ADD WORDS MODE -->
+  <div class="add-section" id="addSection">
+    <div class="input-group">
+      <label class="input-label">toki pona word</label>
+      <input class="input-field" id="inputToki" placeholder="e.g. telo" />
+    </div>
+    <div class="input-group">
+      <label class="input-label">english meaning</label>
+      <input class="input-field" id="inputMeaning" placeholder="e.g. water, liquid, fluid" />
+    </div>
+    <div class="input-group">
+      <label class="input-label">category</label>
+      <select class="select-field" id="inputCategory">
+        <option value="noun">noun</option>
+        <option value="verb">verb</option>
+        <option value="adjective">adjective</option>
+        <option value="preposition">preposition</option>
+        <option value="particle">particle</option>
+        <option value="other">other</option>
+      </select>
+    </div>
+    <button class="btn-add" onclick="addWord()">+ add word to deck</button>
+
+    <!-- Word-only flashcard deck -->
+    <div id="wordDeckArea" style="margin-top:28px;display:none;">
+      <div class="progress-wrap">
+        <div class="progress-info">
+          <span id="wordDeckProgressText">word 1 of 1</span>
+          <span id="wordDeckKnownCount">0 known</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="wordDeckProgressFill" style="width:0%"></div></div>
+      </div>
+      <div class="card-scene" onclick="flipWordDeck()" id="wordDeckCardScene">
+        <div class="card-inner" id="wordDeckCardInner">
+          <div class="card-face card-front">
+            <div class="card-label">toki pona</div>
+            <div class="card-word" id="wordDeckFront" style="color:var(--neon-pink);text-shadow:0 0 20px var(--neon-pink);"></div>
+            <div class="card-hint">tap to reveal meaning</div>
+          </div>
+          <div class="card-face card-back">
+            <div class="card-label">english</div>
+            <div class="card-word" id="wordDeckBack" style="color:var(--neon-cyan);text-shadow:0 0 20px var(--neon-cyan);font-size:clamp(1.6rem,6vw,2.4rem);"></div>
+            <div class="card-category" id="wordDeckCategory"></div>
+          </div>
+        </div>
+      </div>
+      <div class="flip-hint" id="wordDeckFlipHint">↑ tap card to flip ↑</div>
+      <div class="answer-btns" id="wordDeckAnswerBtns" style="display:none">
+        <button class="btn btn-dontknow" onclick="wordDeckAnswer(false)">✗ still learning</button>
+        <button class="btn btn-know" onclick="wordDeckAnswer(true)">✓ i know it</button>
+      </div>
+      <button class="btn-next" onclick="nextWordDeck()" id="wordDeckSkipBtn">skip →</button>
+      <div class="completion" id="wordDeckCompletion">
+        <div class="completion-emoji">🌟</div>
+        <div class="completion-title">pona!</div>
+        <div class="completion-sub" id="wordDeckCompletionSub"></div>
+        <button class="btn-restart" onclick="restartWordDeck()">start over</button>
+      </div>
+    </div>
+
+    <div class="word-list" id="wordList"></div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://mxzdksvnwipvqdsrgmll.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_DFfD-1s7YPIeOj2x_a0Ivg_jHQwQkMC';
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  let words = [];
+  let sentences = [];
+  let deck = [];
+  let currentIndex = 0;
+  let isFlipped = false;
+  let known = 0;
+  let dontKnow = 0;
+  let quizIndex = 0;
+  let quizScore = 0;
+  let quizDeck = [];
+
+  function shuffle(arr) {
+    return [...arr].sort(() => Math.random() - 0.5);
+  }
+
+  // ── LOAD FROM SUPABASE ──────────────────────────────────
+  async function loadAll() {
+    showToast('loading your deck...');
+    const [{ data: w }, { data: s }, { data: r }] = await Promise.all([
+      sb.from('words').select('*').order('created_at'),
+      sb.from('sentences').select('*').order('created_at'),
+      sb.from('rules').select('*').order('created_at'),
+    ]);
+    words = w || [];
+    sentences = s || [];
+    rules = r || [];
+    initDeck();
+    renderWordList();
+    renderSentenceList();
+    renderGrammarList();
+    showToast(`loaded ${words.length} words & ${sentences.length} sentences 🌱`);
+  }
+
+  // ── FLASHCARD ───────────────────────────────────────────
+  function initDeck() {
+    const allCards = [
+      ...words.map(w => ({ type: 'word', front: w.toki, back: w.meaning, category: w.category })),
+      ...sentences.map(s => ({ type: 'sentence', front: s.toki, back: s.translation, category: 'sentence' })),
+      ...rules.map(r => ({ type: 'rule', front: r.rule, back: r.translation, category: 'rule' })),
+    ];
+    if (allCards.length === 0) {
+      document.getElementById('cardScene').style.display = 'none';
+      document.getElementById('flipHint').style.display = 'none';
+      document.getElementById('skipBtn').style.display = 'none';
+      document.getElementById('answerBtns').style.display = 'none';
+      document.getElementById('progressText').textContent = 'no cards yet';
+      document.getElementById('knownCount').textContent = '';
+      document.getElementById('statLeft').textContent = '0';
+      document.getElementById('completion').classList.remove('show');
+      const empty = document.getElementById('emptyState');
+      if (empty) empty.style.display = 'block';
+      return;
+    }
+    const empty = document.getElementById('emptyState');
+    if (empty) empty.style.display = 'none';
+    document.getElementById('cardScene').style.display = '';
+    document.getElementById('flipHint').style.display = '';
+    document.getElementById('skipBtn').style.display = '';
+    deck = shuffle(allCards);
+    currentIndex = 0;
+    known = 0;
+    dontKnow = 0;
+    isFlipped = false;
+    updateCard();
+    updateStats();
+    document.getElementById('completion').classList.remove('show');
+  }
+
+  function updateCard() {
+    if (currentIndex >= deck.length) { showCompletion(); return; }
+    const w = deck[currentIndex];
+    const typeColors = { word: 'var(--neon-pink)', sentence: 'var(--neon-orange)', rule: 'var(--neon-yellow)' };
+    document.getElementById('cardWord').textContent = w.front;
+    document.getElementById('cardWord').style.color = typeColors[w.type] || 'var(--neon-green)';
+    document.getElementById('cardWord').style.textShadow = `0 0 20px ${typeColors[w.type]}`;
+    document.getElementById('cardWord').style.fontSize = w.type === 'word' ? 'clamp(2.5rem, 10vw, 4rem)' : 'clamp(1.1rem, 3.5vw, 1.6rem)';
+    document.getElementById('cardWord').style.lineHeight = w.type === 'word' ? '1' : '1.5';
+    document.getElementById('cardMeaning').textContent = w.back;
+    document.getElementById('cardCategory').textContent = w.category;
+    document.getElementById('cardInner').classList.remove('flipped');
+    document.getElementById('answerBtns').style.display = 'none';
+    document.getElementById('skipBtn').style.display = '';
+    document.getElementById('flipHint').style.display = '';
+    isFlipped = false;
+    const pct = (currentIndex / deck.length) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressText').textContent = `card ${currentIndex + 1} of ${deck.length}`;
+    document.getElementById('knownCount').textContent = `${known} known`;
+  }
+
+  function updateStats() {
+    document.getElementById('statKnown').textContent = known;
+    document.getElementById('statDontKnow').textContent = dontKnow;
+    document.getElementById('statLeft').textContent = Math.max(0, deck.length - currentIndex);
+  }
+
+  function flipCard() {
+    if (currentIndex >= deck.length) return;
+    isFlipped = !isFlipped;
+    document.getElementById('cardInner').classList.toggle('flipped', isFlipped);
+    if (isFlipped) {
+      document.getElementById('answerBtns').style.display = 'grid';
+      document.getElementById('skipBtn').style.display = 'none';
+      document.getElementById('flipHint').style.display = 'none';
+    } else {
+      document.getElementById('answerBtns').style.display = 'none';
+      document.getElementById('skipBtn').style.display = '';
+      document.getElementById('flipHint').style.display = '';
+    }
+  }
+
+  function answer(didKnow) {
+    if (didKnow) known++; else dontKnow++;
+    currentIndex++;
+    updateStats();
+    updateCard();
+  }
+
+  function nextCard() { currentIndex++; updateStats(); updateCard(); }
+
+  function showCompletion() {
+    document.getElementById('cardScene').style.display = 'none';
+    document.getElementById('flipHint').style.display = 'none';
+    document.getElementById('skipBtn').style.display = 'none';
+    document.getElementById('answerBtns').style.display = 'none';
+    document.getElementById('progressFill').style.width = '100%';
+    document.getElementById('completionSub').textContent =
+      `you knew ${known} out of ${deck.length} words — ${Math.round(known/deck.length*100)}%`;
+    document.getElementById('completion').classList.add('show');
+  }
+
+  function restart() { initDeck(); }
+
+  // ── QUIZ ────────────────────────────────────────────────
+  function initQuiz() {
+    const allCards = [
+      ...words.map(w => ({ front: w.toki, back: w.meaning })),
+      ...sentences.map(s => ({ front: s.toki, back: s.translation })),
+      ...rules.map(r => ({ front: r.rule, back: r.translation })),
+    ];
+    if (allCards.length < 4) { showToast('add at least 4 items to quiz!'); return; }
+    quizDeck = shuffle(allCards);
+    quizIndex = 0;
+    quizScore = 0;
+    document.getElementById('quizCompletion').classList.remove('show');
+    showQuizQuestion();
+  }
+
+  function showQuizQuestion() {
+    if (quizIndex >= quizDeck.length) { showQuizCompletion(); return; }
+    const w = quizDeck[quizIndex];
+    const allCards = [
+      ...words.map(w => ({ front: w.toki, back: w.meaning })),
+      ...sentences.map(s => ({ front: s.toki, back: s.translation })),
+      ...rules.map(r => ({ front: r.rule, back: r.translation })),
+    ];
+    document.getElementById('quizWord').textContent = w.front;
+    document.getElementById('quizWord').style.fontSize = w.front.length > 20 ? 'clamp(1rem,3.5vw,1.5rem)' : '';
+    document.getElementById('quizProgressText').textContent = `question ${quizIndex + 1} of ${quizDeck.length}`;
+    document.getElementById('quizScore').textContent = `score: ${quizScore}`;
+    document.getElementById('quizProgressFill').style.width = (quizIndex / quizDeck.length * 100) + '%';
+    const others = shuffle(allCards.filter(x => x.front !== w.front)).slice(0, 3);
+    const options = shuffle([w, ...others]);
+    const container = document.getElementById('quizOptions');
+    container.innerHTML = '';
+    options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'quiz-opt';
+      btn.textContent = opt.back;
+      btn.onclick = () => checkQuizAnswer(btn, opt.front === w.front, container);
+      container.appendChild(btn);
+    });
+  }
+
+  function checkQuizAnswer(btn, correct, container) {
+    const btns = container.querySelectorAll('.quiz-opt');
+    btns.forEach(b => b.disabled = true);
+    if (correct) { btn.classList.add('correct'); quizScore++; showToast('pona! ✓'); }
+    else {
+      btn.classList.add('wrong');
+      btns.forEach(b => { if (b.textContent === quizDeck[quizIndex].back) b.classList.add('correct'); });
+      showToast('ike... keep learning!');
+    }
+    quizIndex++;
+    setTimeout(showQuizQuestion, 1200);
+  }
+
+  function showQuizCompletion() {
+    document.getElementById('quizProgressFill').style.width = '100%';
+    const pct = Math.round(quizScore / quizDeck.length * 100);
+    document.getElementById('quizCompletionSub').textContent =
+      `${quizScore} / ${quizDeck.length} correct — ${pct}% ${pct >= 80 ? '🔥' : pct >= 50 ? '💪' : '📚'}`;
+    document.getElementById('quizCompletion').classList.add('show');
+  }
+
+  function restartQuiz() { initQuiz(); }
+
+  // ── ADD / EDIT / DELETE WORDS ───────────────────────────
+  async function addWord() {
+    const toki = document.getElementById('inputToki').value.trim().toLowerCase();
+    const meaning = document.getElementById('inputMeaning').value.trim();
+    const category = document.getElementById('inputCategory').value;
+    if (!toki || !meaning) { showToast('fill in both fields!'); return; }
+    if (words.find(w => w.toki === toki)) { showToast('word already exists!'); return; }
+    const { data, error } = await sb.from('words').insert({ toki, meaning, category }).select().single();
+    if (error) { showToast('error saving word 😕'); return; }
+    words.push(data);
+    document.getElementById('inputToki').value = '';
+    document.getElementById('inputMeaning').value = '';
+    renderWordList();
+    initDeck();
+    showToast(`"${toki}" saved to your deck! 🌱`);
+  }
+
+  async function deleteWord(id, toki) {
+    await sb.from('words').delete().eq('id', id);
+    words = words.filter(w => w.id !== id);
+    renderWordList();
+    initDeck();
+    showToast(`"${toki}" removed`);
+  }
+
+  function editWord(id) {
+    const w = words.find(w => w.id === id);
+    if (!w) return;
+    document.getElementById('inputToki').value = w.toki;
+    document.getElementById('inputMeaning').value = w.meaning;
+    document.getElementById('inputCategory').value = w.category;
+    const btn = document.querySelector('.btn-add');
+    btn.textContent = `✎ update "${w.toki}"`;
+    btn.onclick = () => updateWord(id, w.toki);
+    document.getElementById('inputMeaning').focus();
+    showToast(`editing "${w.toki}" — update the meaning!`);
+  }
+
+  async function updateWord(id, toki) {
+    const meaning = document.getElementById('inputMeaning').value.trim();
+    const category = document.getElementById('inputCategory').value;
+    if (!meaning) { showToast('meaning cannot be empty!'); return; }
+    await sb.from('words').update({ meaning, category }).eq('id', id);
+    const w = words.find(w => w.id === id);
+    if (w) { w.meaning = meaning; w.category = category; }
+    document.getElementById('inputToki').value = '';
+    document.getElementById('inputMeaning').value = '';
+    const btn = document.querySelector('.btn-add');
+    btn.textContent = '+ add word to deck';
+    btn.onclick = addWord;
+    renderWordList();
+    initDeck();
+    showToast(`"${toki}" updated!`);
+  }
+
+  function renderWordList() {
+    const list = document.getElementById('wordList');
+    list.innerHTML = '';
+    [...words].reverse().forEach(w => {
+      const item = document.createElement('div');
+      item.className = 'word-item';
+      item.innerHTML = `
+        <span><span class="word-item-toki">${w.toki}</span> <span class="word-item-en">— ${w.meaning}</span></span>
+        <span style="display:flex;gap:4px;">
+          <button class="btn-delete" title="edit" onclick="editWord('${w.id}')" style="color:var(--neon-cyan);">✎</button>
+          <button class="btn-delete" title="delete" onclick="deleteWord('${w.id}','${w.toki}')">✕</button>
+        </span>
+      `;
+      list.appendChild(item);
+    });
+  }
+
+  // ── SENTENCES ───────────────────────────────────────────
+  let sentDeck = [];
+  let sentIndex = 0;
+  let sentKnown = 0;
+  let sentFlipped = false;
+
+  async function addSentence() {
+    const toki = document.getElementById('inputSentenceToki').value.trim();
+    const translation = document.getElementById('inputSentenceEn').value.trim();
+    if (!toki || !translation) { showToast('fill in both fields!'); return; }
+    const { data, error } = await sb.from('sentences').insert({ toki, translation }).select().single();
+    if (error) { showToast('error saving sentence 😕'); return; }
+    sentences.push(data);
+    document.getElementById('inputSentenceToki').value = '';
+    document.getElementById('inputSentenceEn').value = '';
+    renderSentenceList();
+    initSentenceDeck();
+    showToast('sentence saved! 🌱');
+  }
+
+  async function deleteSentence(id) {
+    await sb.from('sentences').delete().eq('id', id);
+    sentences = sentences.filter(s => s.id !== id);
+    renderSentenceList();
+    initSentenceDeck();
+  }
+
+  function renderSentenceList() {
+    const list = document.getElementById('sentenceList');
+    list.innerHTML = '';
+    [...sentences].reverse().forEach(s => {
+      const item = document.createElement('div');
+      item.className = 'word-item';
+      item.style.flexDirection = 'column';
+      item.style.alignItems = 'flex-start';
+      item.style.gap = '4px';
+      item.innerHTML = `
+        <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+          <span class="word-item-toki" style="font-size:0.8rem;">${s.toki}</span>
+          <span style="display:flex;gap:4px;">
+            <button class="btn-delete" title="edit" onclick="editSentence('${s.id}')" style="color:var(--neon-cyan);">✎</button>
+            <button class="btn-delete" onclick="deleteSentence('${s.id}')">✕</button>
+          </span>
+        </div>
+        <span class="word-item-en" style="font-size:0.72rem;">${s.translation}</span>
+      `;
+      list.appendChild(item);
+    });
+    document.getElementById('sentenceDeckArea').style.display = sentences.length > 0 ? 'block' : 'none';
+  }
+
+  function initSentenceDeck() {
+    if (sentences.length === 0) return;
+    sentDeck = shuffle(sentences);
+    sentIndex = 0;
+    sentKnown = 0;
+    sentFlipped = false;
+    document.getElementById('sentCompletion').classList.remove('show');
+    document.getElementById('sentCardScene').style.display = '';
+    document.getElementById('sentFlipHint').style.display = '';
+    document.getElementById('sentSkipBtn').style.display = '';
+    updateSentenceCard();
+  }
+
+  function updateSentenceCard() {
+    if (sentIndex >= sentDeck.length) {
+      document.getElementById('sentCardScene').style.display = 'none';
+      document.getElementById('sentFlipHint').style.display = 'none';
+      document.getElementById('sentSkipBtn').style.display = 'none';
+      document.getElementById('sentAnswerBtns').style.display = 'none';
+      const pct = Math.round(sentKnown / sentDeck.length * 100);
+      document.getElementById('sentCompletionSub').textContent = `you knew ${sentKnown} of ${sentDeck.length} sentences — ${pct}%`;
+      document.getElementById('sentCompletion').classList.add('show');
+      document.getElementById('sentProgressFill').style.width = '100%';
+      return;
+    }
+    const s = sentDeck[sentIndex];
+    document.getElementById('sentCardToki').textContent = s.toki;
+    document.getElementById('sentCardEn').textContent = s.translation;
+    document.getElementById('sentCardInner').classList.remove('flipped');
+    document.getElementById('sentAnswerBtns').style.display = 'none';
+    document.getElementById('sentSkipBtn').style.display = '';
+    document.getElementById('sentFlipHint').style.display = '';
+    sentFlipped = false;
+    document.getElementById('sentProgressFill').style.width = (sentIndex / sentDeck.length * 100) + '%';
+    document.getElementById('sentProgressText').textContent = `sentence ${sentIndex + 1} of ${sentDeck.length}`;
+    document.getElementById('sentKnownCount').textContent = `${sentKnown} known`;
+  }
+
+  function flipSentence() {
+    if (sentIndex >= sentDeck.length) return;
+    sentFlipped = !sentFlipped;
+    document.getElementById('sentCardInner').classList.toggle('flipped', sentFlipped);
+    if (sentFlipped) {
+      document.getElementById('sentAnswerBtns').style.display = 'grid';
+      document.getElementById('sentSkipBtn').style.display = 'none';
+      document.getElementById('sentFlipHint').style.display = 'none';
+    } else {
+      document.getElementById('sentAnswerBtns').style.display = 'none';
+      document.getElementById('sentSkipBtn').style.display = '';
+      document.getElementById('sentFlipHint').style.display = '';
+    }
+  }
+
+  function editSentence(id) {
+    const s = sentences.find(s => s.id === id);
+    if (!s) return;
+    document.getElementById('inputSentenceToki').value = s.toki;
+    document.getElementById('inputSentenceEn').value = s.translation;
+    const btn = document.querySelector('#sentencesSection .btn-add');
+    btn.textContent = `✎ update sentence`;
+    btn.onclick = () => updateSentence(id);
+    document.getElementById('inputSentenceEn').focus();
+    showToast('editing sentence — update and save!');
+  }
+
+  async function updateSentence(id) {
+    const toki = document.getElementById('inputSentenceToki').value.trim();
+    const translation = document.getElementById('inputSentenceEn').value.trim();
+    if (!toki || !translation) { showToast('fill in both fields!'); return; }
+    await sb.from('sentences').update({ toki, translation }).eq('id', id);
+    const s = sentences.find(s => s.id === id);
+    if (s) { s.toki = toki; s.translation = translation; }
+    document.getElementById('inputSentenceToki').value = '';
+    document.getElementById('inputSentenceEn').value = '';
+    const btn = document.querySelector('#sentencesSection .btn-add');
+    btn.textContent = '+ add sentence';
+    btn.onclick = addSentence;
+    renderSentenceList();
+    initSentenceDeck();
+    showToast('sentence updated! 🌱');
+  }
+
+  function sentAnswer(didKnow) { if (didKnow) sentKnown++; sentIndex++; updateSentenceCard(); }
+  function nextSentence() { sentIndex++; updateSentenceCard(); }
+  function restartSentences() { initSentenceDeck(); }
+
+  // ── RULES ───────────────────────────────────────────────
+  let rules = [];
+  let grammarDeck = [];
+  let grammarIndex = 0;
+  let grammarKnown = 0;
+  let grammarFlipped = false;
+
+  async function addGrammar() {
+    const rule = document.getElementById('inputRuleText').value.trim();
+    const example = document.getElementById('inputRuleExample').value.trim();
+    const translation = document.getElementById('inputRuleTranslation').value.trim();
+    if (!rule || !translation) { showToast('fill in rule and translation!'); return; }
+    const { data, error } = await sb.from('rules').insert({ rule, example, translation }).select().single();
+    if (error) { showToast('error saving rule 😕'); return; }
+    rules.push(data);
+    document.getElementById('inputRuleText').value = '';
+    document.getElementById('inputRuleExample').value = '';
+    document.getElementById('inputRuleTranslation').value = '';
+    renderGrammarList();
+    initGrammarDeck();
+    showToast('grammar rule saved! 🌱');
+  }
+
+  async function deleteGrammar(id) {
+    await sb.from('rules').delete().eq('id', id);
+    rules = rules.filter(r => r.id !== id);
+    renderGrammarList();
+    initGrammarDeck();
+  }
+
+  function renderGrammarList() {
+    const list = document.getElementById('grammarList');
+    list.innerHTML = '';
+    [...rules].reverse().forEach(r => {
+      const item = document.createElement('div');
+      item.className = 'word-item';
+      item.style.flexDirection = 'column';
+      item.style.alignItems = 'flex-start';
+      item.style.gap = '4px';
+      item.innerHTML = `
+        <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+          <span class="word-item-toki" style="font-size:0.78rem;color:var(--neon-yellow);white-space:pre-wrap;">${r.rule}</span>
+          <span style="display:flex;gap:4px;">
+            <button class="btn-delete" title="edit" onclick="editGrammar('${r.id}')" style="color:var(--neon-cyan);">✎</button>
+            <button class="btn-delete" onclick="deleteGrammar('${r.id}')">✕</button>
+          </span>
+        </div>
+        <span class="word-item-en" style="font-size:0.72rem;white-space:pre-wrap;">${r.translation}</span>
+      `;
+      list.appendChild(item);
+    });
+    document.getElementById('grammarDeckArea').style.display = rules.length > 0 ? 'block' : 'none';
+  }
+
+  function editGrammar(id) {
+    const r = rules.find(r => r.id === id);
+    if (!r) return;
+    document.getElementById('inputRuleText').value = r.rule;
+    document.getElementById('inputRuleExample').value = r.example || '';
+    document.getElementById('inputRuleTranslation').value = r.translation;
+    const btn = document.querySelector('#grammarSection .btn-add');
+    btn.textContent = `✎ update grammar card`;
+    btn.onclick = () => updateGrammar(id);
+    document.getElementById('inputRuleTranslation').focus();
+    showToast('editing grammar card — update and save!');
+  }
+
+  async function updateGrammar(id) {
+    const rule = document.getElementById('inputRuleText').value.trim();
+    const example = document.getElementById('inputRuleExample').value.trim();
+    const translation = document.getElementById('inputRuleTranslation').value.trim();
+    if (!rule || !translation) { showToast('fill in rule and translation!'); return; }
+    await sb.from('rules').update({ rule, example, translation }).eq('id', id);
+    const r = rules.find(r => r.id === id);
+    if (r) { r.rule = rule; r.example = example; r.translation = translation; }
+    document.getElementById('inputRuleText').value = '';
+    document.getElementById('inputRuleExample').value = '';
+    document.getElementById('inputRuleTranslation').value = '';
+    const btn = document.querySelector('#grammarSection .btn-add');
+    btn.textContent = '+ add grammar card';
+    btn.onclick = addGrammar;
+    renderGrammarList();
+    initGrammarDeck();
+    showToast('grammar card updated! 🌱');
+  }
+
+  function initGrammarDeck() {
+    if (rules.length === 0) return;
+    grammarDeck = shuffle(rules);
+    grammarIndex = 0;
+    grammarKnown = 0;
+    grammarFlipped = false;
+    document.getElementById('grammarCompletion').classList.remove('show');
+    document.getElementById('grammarCardScene').style.display = '';
+    document.getElementById('grammarFlipHint').style.display = '';
+    document.getElementById('grammarSkipBtn').style.display = '';
+    updateGrammarCard();
+  }
+
+  function updateGrammarCard() {
+    if (grammarIndex >= grammarDeck.length) {
+      document.getElementById('grammarCardScene').style.display = 'none';
+      document.getElementById('grammarFlipHint').style.display = 'none';
+      document.getElementById('grammarSkipBtn').style.display = 'none';
+      document.getElementById('grammarAnswerBtns').style.display = 'none';
+      const pct = Math.round(grammarKnown / grammarDeck.length * 100);
+      document.getElementById('grammarCompletionSub').textContent = `you knew ${grammarKnown} of ${grammarDeck.length} grammar cards — ${pct}%`;
+      document.getElementById('grammarCompletion').classList.add('show');
+      document.getElementById('grammarProgressFill').style.width = '100%';
+      return;
+    }
+    const r = grammarDeck[grammarIndex];
+    document.getElementById('grammarCardText').textContent = r.rule;
+    document.getElementById('grammarCardExample').textContent = r.example || '';
+    document.getElementById('grammarCardTranslation').textContent = r.translation;
+    document.getElementById('grammarCardInner').classList.remove('flipped');
+    document.getElementById('grammarAnswerBtns').style.display = 'none';
+    document.getElementById('grammarSkipBtn').style.display = '';
+    document.getElementById('grammarFlipHint').style.display = '';
+    grammarFlipped = false;
+    document.getElementById('grammarProgressFill').style.width = (grammarIndex / grammarDeck.length * 100) + '%';
+    document.getElementById('grammarProgressText').textContent = `grammar ${grammarIndex + 1} of ${grammarDeck.length}`;
+    document.getElementById('grammarKnownCount').textContent = `${grammarKnown} known`;
+  }
+
+  function flipGrammar() {
+    if (grammarIndex >= grammarDeck.length) return;
+    grammarFlipped = !grammarFlipped;
+    document.getElementById('grammarCardInner').classList.toggle('flipped', grammarFlipped);
+    if (grammarFlipped) {
+      document.getElementById('grammarAnswerBtns').style.display = 'grid';
+      document.getElementById('grammarSkipBtn').style.display = 'none';
+      document.getElementById('grammarFlipHint').style.display = 'none';
+    } else {
+      document.getElementById('grammarAnswerBtns').style.display = 'none';
+      document.getElementById('grammarSkipBtn').style.display = '';
+      document.getElementById('grammarFlipHint').style.display = '';
+    }
+  }
+
+  function grammarAnswer(didKnow) { if (didKnow) grammarKnown++; grammarIndex++; updateGrammarCard(); }
+  function nextGrammar() { grammarIndex++; updateGrammarCard(); }
+  function restartGrammar() { initGrammarDeck(); }
+
+  // ── WORD-ONLY DECK ──────────────────────────────────────
+  let wordDeck = [];
+  let wordDeckIndex = 0;
+  let wordDeckKnown = 0;
+  let wordDeckFlipped = false;
+
+  function initWordDeck() {
+    if (words.length === 0) { document.getElementById('wordDeckArea').style.display = 'none'; return; }
+    wordDeck = shuffle(words);
+    wordDeckIndex = 0;
+    wordDeckKnown = 0;
+    wordDeckFlipped = false;
+    document.getElementById('wordDeckArea').style.display = 'block';
+    document.getElementById('wordDeckCompletion').classList.remove('show');
+    document.getElementById('wordDeckCardScene').style.display = '';
+    document.getElementById('wordDeckFlipHint').style.display = '';
+    document.getElementById('wordDeckSkipBtn').style.display = '';
+    updateWordDeckCard();
+  }
+
+  function updateWordDeckCard() {
+    if (wordDeckIndex >= wordDeck.length) {
+      document.getElementById('wordDeckCardScene').style.display = 'none';
+      document.getElementById('wordDeckFlipHint').style.display = 'none';
+      document.getElementById('wordDeckSkipBtn').style.display = 'none';
+      document.getElementById('wordDeckAnswerBtns').style.display = 'none';
+      const pct = Math.round(wordDeckKnown / wordDeck.length * 100);
+      document.getElementById('wordDeckCompletionSub').textContent = `you knew ${wordDeckKnown} of ${wordDeck.length} words — ${pct}%`;
+      document.getElementById('wordDeckCompletion').classList.add('show');
+      document.getElementById('wordDeckProgressFill').style.width = '100%';
+      return;
+    }
+    const w = wordDeck[wordDeckIndex];
+    document.getElementById('wordDeckFront').textContent = w.toki;
+    document.getElementById('wordDeckBack').textContent = w.meaning;
+    document.getElementById('wordDeckCategory').textContent = w.category;
+    document.getElementById('wordDeckCardInner').classList.remove('flipped');
+    document.getElementById('wordDeckAnswerBtns').style.display = 'none';
+    document.getElementById('wordDeckSkipBtn').style.display = '';
+    document.getElementById('wordDeckFlipHint').style.display = '';
+    wordDeckFlipped = false;
+    document.getElementById('wordDeckProgressFill').style.width = (wordDeckIndex / wordDeck.length * 100) + '%';
+    document.getElementById('wordDeckProgressText').textContent = `word ${wordDeckIndex + 1} of ${wordDeck.length}`;
+    document.getElementById('wordDeckKnownCount').textContent = `${wordDeckKnown} known`;
+  }
+
+  function flipWordDeck() {
+    if (wordDeckIndex >= wordDeck.length) return;
+    wordDeckFlipped = !wordDeckFlipped;
+    document.getElementById('wordDeckCardInner').classList.toggle('flipped', wordDeckFlipped);
+    if (wordDeckFlipped) {
+      document.getElementById('wordDeckAnswerBtns').style.display = 'grid';
+      document.getElementById('wordDeckSkipBtn').style.display = 'none';
+      document.getElementById('wordDeckFlipHint').style.display = 'none';
+    } else {
+      document.getElementById('wordDeckAnswerBtns').style.display = 'none';
+      document.getElementById('wordDeckSkipBtn').style.display = '';
+      document.getElementById('wordDeckFlipHint').style.display = '';
+    }
+  }
+
+  function wordDeckAnswer(didKnow) { if (didKnow) wordDeckKnown++; wordDeckIndex++; updateWordDeckCard(); }
+  function nextWordDeck() { wordDeckIndex++; updateWordDeckCard(); }
+  function restartWordDeck() { initWordDeck(); }
+
+  // ── EXPORT / IMPORT (backup) ────────────────────────────
+  function exportData() {
+    const data = { words, sentences };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'toki-pona-deck.json';
+    a.click();
+    showToast('backup saved! 🌱');
+  }
+
+  function importData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const data = JSON.parse(e.target.result);
+        if (data.words && data.words.length) {
+          await sb.from('words').upsert(data.words.map(({toki, meaning, category}) => ({toki, meaning, category})), { onConflict: 'toki' });
+        }
+        if (data.sentences && data.sentences.length) {
+          await sb.from('sentences').insert(data.sentences.map(({toki, translation}) => ({toki, translation})));
+        }
+        await loadAll();
+        showToast('backup restored! 🌱');
+      } catch { showToast('oops, invalid file!'); }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
+  }
+
+  // ── TABS ────────────────────────────────────────────────
+  function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach((t, i) => {
+      t.classList.toggle('active', ['flash','quiz','sentences','grammar','add'][i] === tab);
+    });
+    document.getElementById('flashSection').classList.toggle('hidden', tab !== 'flash');
+    document.getElementById('quizSection').style.display = tab === 'quiz' ? 'block' : 'none';
+    document.getElementById('sentencesSection').style.display = tab === 'sentences' ? 'block' : 'none';
+    document.getElementById('grammarSection').style.display = tab === 'grammar' ? 'block' : 'none';
+    document.getElementById('addSection').style.display = tab === 'add' ? 'block' : 'none';
+    if (tab === 'quiz') initQuiz();
+    if (tab === 'add') { renderWordList(); if (words.length > 0) initWordDeck(); }
+    if (tab === 'sentences') { renderSentenceList(); if (sentences.length > 0) initSentenceDeck(); }
+    if (tab === 'grammar') { renderGrammarList(); if (rules.length > 0) initGrammarDeck(); }
+    randomGridColor();
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  // ── RANDOM GRID COLOR ───────────────────────────────────
+  const gridColors = [
+    'rgba(232,238,255,0.04)',   // white beam
+    'rgba(123,143,255,0.05)',   // periwinkle
+    'rgba(155,111,255,0.05)',   // violet
+    'rgba(58,111,255,0.05)',    // electric blue
+    'rgba(200,208,240,0.04)',   // cool grey
+  ];
+
+  function randomGridColor() {
+    const color = gridColors[Math.floor(Math.random() * gridColors.length)];
+    document.documentElement.style.setProperty('--grid-color', color);
+  }
+
+  // ── INIT ────────────────────────────────────────────────
+  randomGridColor();
+  loadAll();
+</script>
+</body>
+</html>
