@@ -8,13 +8,6 @@
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-  .hand-card, .hand-card *, .card-scene, .card-scene * {
-    user-select: none;
-    -webkit-user-select: none;
-  }
-
-  ::selection { background: transparent; }
-
   :root {
     --bg: #030303;
     --card-bg: #0a0a0a;
@@ -41,40 +34,34 @@
     overflow-x: hidden;
   }
 
-  /* background sitelen pona — pona glyph */
+  /* background grid */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='48' r='20' fill='none' stroke='%237b8fff' stroke-width='1.8' opacity='0.04'/%3E%3Cpath d='M30 52 Q40 62 50 52' fill='none' stroke='%237b8fff' stroke-width='1.8' stroke-linecap='round' opacity='0.04'/%3E%3Cline x1='28' y1='22' x2='25' y2='14' stroke='%237b8fff' stroke-width='1.8' stroke-linecap='round' opacity='0.04'/%3E%3Cline x1='40' y1='20' x2='40' y2='12' stroke='%237b8fff' stroke-width='1.8' stroke-linecap='round' opacity='0.04'/%3E%3Cline x1='52' y1='22' x2='55' y2='14' stroke='%237b8fff' stroke-width='1.8' stroke-linecap='round' opacity='0.04'/%3E%3C/svg%3E");
-    background-size: 80px 80px;
+    background-image:
+      linear-gradient(var(--grid-color) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+    background-size: 40px 40px;
     pointer-events: none;
     z-index: 0;
   }
 
-  .everything { position: relative; z-index: 1; width: 100%; max-width: 100%; padding: 0 40px; }
+  .everything { position: relative; z-index: 1; width: 100%; max-width: 640px; }
 
+  /* HEADER */
   header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
-    width: 100%;
-  }
-
-  .header-center {
     text-align: center;
-    flex-shrink: 0;
+    margin-bottom: 36px;
   }
 
   .logo {
     font-family: 'Syne', sans-serif;
-    font-size: 1.2rem;
+    font-size: clamp(1.8rem, 6vw, 3rem);
     font-weight: 800;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #d8dce8;
-    text-shadow: 0 0 14px rgba(255,255,255,0.7), 0 0 50px rgba(255,255,255,0.35);
+    letter-spacing: -1px;
+    color: var(--neon-green);
+    text-shadow: 0 0 20px var(--neon-green), 0 0 60px rgba(123,143,255,0.3);
     line-height: 1;
   }
 
@@ -82,9 +69,6 @@
     color: var(--neon-cyan);
     text-shadow: 0 0 20px var(--neon-cyan), 0 0 60px rgba(155,111,255,0.3);
   }
-
-  .tagline { display: none; }
-
 
   .tagline {
     font-size: 0.65rem;
@@ -94,43 +78,42 @@
     margin-top: 8px;
   }
 
-  /* TABS — plain text */
-  .tabs { display: contents; }
-
-  .tab-group, .tab-group-right {
+  /* TABS */
+  .tabs {
     display: flex;
-    gap: 24px;
-    align-items: center;
+    gap: 4px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 28px;
   }
 
   .tab {
-    background: none;
+    flex: 1;
+    padding: 10px;
     border: none;
+    border-radius: 9px;
+    background: transparent;
     color: var(--muted2);
     font-family: 'Space Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.18em;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     cursor: pointer;
-    transition: color 0.2s;
-    padding: 0;
-    user-select: none;
+    transition: all 0.2s;
   }
 
-  .tab .tab-icon { display: none; }
-  .tab:hover { color: #d8dce8; }
-
   .tab.active {
-    color: #d8dce8;
-    text-shadow: 0 0 10px rgba(232,238,255,0.5);
+    background: #111;
+    color: var(--neon-green);
+    box-shadow: 0 0 12px rgba(123,143,255,0.15);
+    border: 1px solid rgba(123,143,255,0.2);
   }
 
   /* PROGRESS BAR */
   .progress-wrap {
-    margin-bottom: 16px;
-    max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-bottom: 20px;
   }
 
   .progress-info {
@@ -158,172 +141,9 @@
     transition: width 0.4s ease;
   }
 
-  /* FLASHCARD HAND */
-  .card-hand-area {
-    position: relative;
-    height: 380px;
-    margin-bottom: 16px;
-    margin-top: -40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .hand-card {
-    position: absolute;
-    width: 220px;
-    height: 150px;
-    border-radius: 20px;
-    background: var(--card-bg);
-    border: 1px solid rgba(123,143,255,0.3);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 14px;
-    text-align: center;
-    transition: transform 0.25s cubic-bezier(0.2,0,0,1), box-shadow 0.25s, border-color 0.25s, opacity 0.25s;
-    transform-origin: center center;
-    user-select: none;
-    overflow: hidden;
-  }
-
-  .hand-card:hover {
-    border-color: rgba(123,143,255,0.9);
-    box-shadow: 0 20px 48px rgba(123,143,255,0.35);
-  }
-
-  .hand-card .hc-label {
-    font-size: 0.48rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted2);
-    margin-bottom: 6px;
-    flex-shrink: 0;
-  }
-
-  .hand-card .hc-word {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(0.55rem, 1.4vw, 0.95rem);
-    font-weight: 800;
-    line-height: 1.2;
-    word-break: break-word;
-    max-width: 100%;
-  }
-
-  .hand-card .hc-meaning {
-    font-size: clamp(0.38rem, 0.9vw, 0.5rem);
-    color: var(--muted2);
-    margin-top: 5px;
-    line-height: 1.3;
-    max-width: 100%;
-  }
-
-  .hand-card .hc-hint {
-    font-size: 0.4rem;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-top: 6px;
-    flex-shrink: 0;
-  }
-
-  /* MOBILE VERTICAL CAROUSEL */
-  .mobile-carousel {
-    display: none;
-    position: relative;
-    flex: 1;
-    overflow: hidden;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .carousel-track {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .carousel-card {
-    position: absolute;
-    width: 88%;
-    border-radius: 20px;
-    background: var(--card-bg);
-    border: 1px solid rgba(123,143,255,0.25);
-    padding: 28px 20px;
-    text-align: center;
-    cursor: pointer;
-    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.35s, box-shadow 0.35s;
-    user-select: none;
-    -webkit-user-select: none;
-    backface-visibility: hidden;
-  }
-
-  .carousel-card .cc-label {
-    font-size: 0.5rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted2);
-    margin-bottom: 12px;
-  }
-
-  .carousel-card .cc-word {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(1.6rem, 7vw, 2.2rem);
-    font-weight: 800;
-    line-height: 1.2;
-    margin-bottom: 10px;
-  }
-
-  .carousel-card .cc-meaning {
-    font-size: 0.75rem;
-    color: var(--muted2);
-    line-height: 1.5;
-    margin-bottom: 12px;
-  }
-
-  .carousel-card .cc-hint {
-    font-size: 0.5rem;
-    color: var(--muted);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    animation: pulse 2s infinite;
-  }
-
-  .carousel-card .cc-back { display: none; }
-  .carousel-card .cc-front { display: block; }
-  .carousel-card.flipped .cc-front { display: none; }
-  .carousel-card.flipped .cc-back { display: block; }
-
-  .carousel-btns {
-    display: flex;
-    gap: 10px;
-    margin-top: 14px;
-    justify-content: center;
-  }
-
-  .carousel-btn {
-    flex: 1;
-    max-width: 120px;
-    padding: 10px;
-    border-radius: 12px;
-    border: 1px solid;
-    background: transparent;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    cursor: pointer;
-  }
-
-  .carousel-btn-know { border-color: rgba(123,143,255,0.4); color: var(--neon-green); }
-  .carousel-btn-learn { border-color: rgba(155,111,255,0.4); color: var(--neon-pink); }
-    perspective: 1200px;
+  /* FLASHCARD */
+  .card-scene {
+    perspective: 1000px;
     margin-bottom: 20px;
     cursor: pointer;
   }
@@ -331,7 +151,7 @@
   .card-inner {
     position: relative;
     width: 100%;
-    height: 240px;
+    height: 260px;
     transform-style: preserve-3d;
     transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -439,7 +259,7 @@
     border: 1px solid;
     background: transparent;
     font-family: 'Space Mono', monospace;
-    font-size: 1.2rem;
+    font-size: 0.75rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     cursor: pointer;
@@ -472,7 +292,7 @@
     background: transparent;
     color: var(--neon-cyan);
     font-family: 'Space Mono', monospace;
-    font-size: 1.2rem;
+    font-size: 0.75rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     cursor: pointer;
@@ -486,29 +306,31 @@
 
   /* STATS ROW */
   .stats {
-    display: flex;
-    justify-content: center;
-    gap: 32px;
-    margin-top: 16px;
-    margin-bottom: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 28px;
   }
 
   .stat-box {
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 10px;
+    text-align: center;
   }
 
   .stat-num {
-    font-family: 'Space Mono', monospace;
-    font-size: 1rem;
-    font-weight: 700;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
     line-height: 1;
+    margin-bottom: 4px;
   }
 
   .stat-label {
-    font-size: 0.65rem;
-    letter-spacing: 0.12em;
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--muted2);
   }
@@ -552,7 +374,7 @@
     background: var(--card-bg);
     color: var(--text);
     font-family: 'Space Mono', monospace;
-    font-size: 1.2rem;
+    font-size: 0.75rem;
     cursor: pointer;
     transition: all 0.2s;
     text-align: center;
@@ -666,7 +488,7 @@
     background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 10px;
-    font-size: 1.2rem;
+    font-size: 0.75rem;
   }
 
   .word-item-toki { color: var(--neon-pink); font-weight: 700; }
@@ -704,7 +526,7 @@
     text-shadow: 0 0 20px var(--neon-green);
     margin-bottom: 8px;
   }
-  .completion-sub { color: var(--muted2); font-size: 1.2rem; margin-bottom: 24px; }
+  .completion-sub { color: var(--muted2); font-size: 0.75rem; margin-bottom: 24px; }
 
   .btn-restart {
     padding: 14px 32px;
@@ -713,7 +535,7 @@
     background: transparent;
     color: var(--neon-green);
     font-family: 'Space Mono', monospace;
-    font-size: 1.2rem;
+    font-size: 0.75rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     cursor: pointer;
@@ -742,185 +564,23 @@
     white-space: nowrap;
   }
   .toast.show { transform: translateX(-50%) translateY(0); }
-
-  @media (max-width: 600px) {
-    html, body {
-      height: 100dvh;
-      overflow: hidden;
-      padding: 0;
-    }
-
-    body {
-      padding: 8px 8px 70px;
-      justify-content: flex-start;
-    }
-
-    .everything {
-      padding: 0 8px;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .app-wrapper {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .flashcard-section {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .card-hand-area {
-      flex: 1;
-      height: auto;
-      min-height: 200px;
-      max-height: 55vw;
-      margin: 8px 0;
-    }
-
-    .card-inner { height: 180px; }
-    .card-face { padding: 20px; border-radius: 16px; }
-    .card-word { font-size: clamp(1.4rem, 7vw, 2rem) !important; }
-
-    .progress-wrap { margin-bottom: 6px; flex-shrink: 0; }
-    .progress-info { font-size: 0.55rem; }
-    .stats { gap: 12px; margin-top: 8px; flex-shrink: 0; }
-    .stat-num { font-size: 0.85rem; }
-    .stat-label { font-size: 0.5rem; }
-
-    .quiz-options { grid-template-columns: 1fr; }
-    .btn, .btn-next { font-size: 0.6rem; padding: 10px; }
-    .answer-btns { gap: 6px; margin-bottom: 8px; flex-shrink: 0; }
-    .btn-next { margin-bottom: 8px; }
-  }
-
-  /* LANDING PAGE */
-  .landing {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 40px 24px;
-    position: relative;
-    z-index: 1;
-  }
-
-  .landing-logo {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(3rem, 12vw, 6rem);
-    font-weight: 800;
-    letter-spacing: -2px;
-    color: #d8dce8;
-    line-height: 1;
-    margin-bottom: 8px;
-    animation: pulse-white 4s ease-in-out infinite;
-  }
-
-  .landing-logo span {
-    color: var(--neon-cyan);
-    animation: pulse-cyan 4s ease-in-out 1.5s infinite;
-  }
-
-  @keyframes pulse-white {
-    0%, 100% { text-shadow: 0 0 10px rgba(255,255,255,0.4), 0 0 30px rgba(255,255,255,0.15); }
-    50%       { text-shadow: 0 0 20px rgba(255,255,255,0.9), 0 0 60px rgba(255,255,255,0.4), 0 0 100px rgba(200,208,240,0.2); }
-  }
-
-  @keyframes pulse-cyan {
-    0%, 100% { text-shadow: 0 0 10px rgba(123,143,255,0.4), 0 0 30px rgba(123,143,255,0.15); }
-    50%       { text-shadow: 0 0 20px var(--neon-cyan), 0 0 60px rgba(155,111,255,0.5), 0 0 100px rgba(123,143,255,0.2); }
-  }
-
-  .landing-sub {
-    font-size: 0.65rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--muted2);
-    margin-bottom: 64px;
-  }
-
-  .landing-about {
-    max-width: 480px;
-    margin-bottom: 56px;
-  }
-
-  .landing-about p {
-    font-size: 0.85rem;
-    line-height: 1.9;
-    color: #888;
-    margin-bottom: 16px;
-  }
-
-  .landing-about p:last-child { margin-bottom: 0; }
-
-  .landing-about strong {
-    color: var(--neon-cyan);
-    font-weight: 700;
-  }
-
-  .landing-divider {
-    width: 40px;
-    height: 1px;
-    background: rgba(123,143,255,0.3);
-    margin: 0 auto 32px;
-  }
-
-  .btn-start {
-    padding: 16px 48px;
-    border-radius: 12px;
-    border: none;
-    background: transparent;
-    color: var(--neon-green);
-    font-family: 'Space Mono', monospace;
-    font-size: 0.8rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: background 0.3s, letter-spacing 0.3s;
-    animation: pulse-btn-text 4s ease-in-out 2.5s infinite;
-  }
-
-  .btn-start:hover {
-    letter-spacing: 0.28em;
-  }
-
-  @keyframes pulse-btn-text {
-    0%, 100% { color: rgba(232,238,255,0.4); text-shadow: none; }
-    50%       { color: #e8eeff; text-shadow: 0 0 16px rgba(232,238,255,0.8), 0 0 40px rgba(123,143,255,0.3); }
-  }
-
-  .app-wrapper { display: none; }
 </style>
 </head>
 <body>
 <div class="everything">
 
-  <!-- LANDING PAGE -->
-  <div class="landing" id="landingPage">
-    <div class="landing-logo">toki<span>pona</span></div>
-    <div class="landing-sub">the language of good</div>
+  <header>
+    <div class="logo">toki<span>pona</span></div>
+    <div class="tagline">your personal flashcard deck · o kama sona!</div>
+  </header>
 
-    <div class="landing-about">
-      <p><strong>toki pona</strong> is a minimalist constructed language created by Canadian linguist Sonja Lang in 2001. It is designed to be as simple as possible — the entire language has only <strong>~137 words</strong>.</p>
-      <div class="landing-divider"></div>
-      <p>The name means <strong>"good language"</strong> or <strong>"simple language"</strong>. By reducing vocabulary to the bare essentials, toki pona encourages speakers to think about the fundamental nature of things and express complex ideas through simple building blocks.</p>
-      <div class="landing-divider"></div>
-      <p>It takes most people just <strong>a few weeks</strong> to learn. This deck will guide you through the core vocabulary, sentences and grammar — one card at a time.</p>
-    </div>
-
-    <button class="btn-start" onclick="startApp()">o kama sona →</button>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('flash')">⚡ Flash</button>
+    <button class="tab" onclick="switchTab('quiz')">🎯 Quiz</button>
+    <button class="tab" onclick="switchTab('sentences')">💬 Sentences</button>
+    <button class="tab" onclick="switchTab('grammar')">📖 Grammar</button>
+    <button class="tab" onclick="switchTab('add')">＋ Words</button>
   </div>
-
-  <!-- MAIN APP -->
-  <div class="app-wrapper" id="appWrapper">
 
   <!-- FLASHCARD MODE -->
   <div class="flashcard-section" id="flashSection">
@@ -933,29 +593,27 @@
       <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
     </div>
 
+    <div class="stats">
+      <div class="stat-box">
+        <div class="stat-num" id="statKnown" style="color:var(--neon-green)">0</div>
+        <div class="stat-label">know it</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="statDontKnow" style="color:var(--neon-pink)">0</div>
+        <div class="stat-label">learning</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="statLeft" style="color:var(--neon-cyan)">20</div>
+        <div class="stat-label">remaining</div>
+      </div>
+    </div>
 
     <div id="emptyState" style="text-align:center;padding:48px 24px;background:var(--card-bg);border:1px solid var(--border);border-radius:20px;margin-bottom:20px;">
-      <div style="margin-bottom:16px;display:flex;justify-content:center;">
-        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="4" y="4" width="14" height="14" rx="2" stroke="#7b8fff" stroke-width="1.5" fill="none" opacity="0.6"/>
-          <rect x="22" y="4" width="14" height="14" rx="2" stroke="#9b6fff" stroke-width="1.5" fill="none" opacity="0.6"/>
-          <rect x="4" y="22" width="14" height="14" rx="2" stroke="#9b6fff" stroke-width="1.5" fill="none" opacity="0.6"/>
-          <rect x="22" y="22" width="14" height="14" rx="2" stroke="#7b8fff" stroke-width="1.5" fill="none" opacity="0.6"/>
-        </svg>
-      </div>
+      <div style="font-size:2rem;margin-bottom:16px;">🌱</div>
       <div style="font-family:'Syne',sans-serif;font-size:1.2rem;color:var(--neon-green);margin-bottom:8px;">your deck is empty</div>
       <div style="font-size:0.72rem;color:var(--muted2);">go to <strong style="color:var(--text)">＋ Words</strong> to add your first words!</div>
     </div>
 
-    <!-- CARD HAND (desktop) -->
-    <div class="card-hand-area" id="cardHandArea" style="display:none;"></div>
-
-    <!-- MOBILE VERTICAL CAROUSEL -->
-    <div class="mobile-carousel" id="mobileCarousel">
-      <div class="carousel-track" id="carouselTrack"></div>
-    </div>
-
-    <!-- SELECTED CARD (flip animation) -->
     <div class="card-scene" onclick="flipCard()" id="cardScene" style="display:none;">
       <div class="card-inner" id="cardInner">
         <div class="card-face card-front">
@@ -985,21 +643,6 @@
       <div class="completion-title">pona!</div>
       <div class="completion-sub" id="completionSub">you reviewed all the cards</div>
       <button class="btn-restart" onclick="restart()">start over</button>
-    </div>
-
-    <div class="stats" style="margin-top: 32px;">
-      <div class="stat-box">
-        <div class="stat-num" id="statKnown" style="color:var(--neon-green)">0</div>
-        <div class="stat-label">know it</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num" id="statDontKnow" style="color:var(--neon-pink)">0</div>
-        <div class="stat-label">learning</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num" id="statLeft" style="color:var(--neon-cyan)">20</div>
-        <div class="stat-label">remaining</div>
-      </div>
     </div>
 
   </div>
@@ -1208,30 +851,6 @@
     <div class="word-list" id="wordList"></div>
   </div>
 
-  <footer style="position:fixed;bottom:0;left:0;right:0;padding:16px 28px;z-index:100;background: linear-gradient(to top, #030303 70%, transparent);border-top: 1px solid rgba(255,255,255,0.04);">
-    <header>
-      <div class="tabs">
-        <div class="tab-group">
-          <button class="tab active" onclick="switchTab('flash')"><span class="tab-icon">⚡</span>flash</button>
-          <button class="tab" onclick="switchTab('quiz')"><span class="tab-icon">🎯</span>quiz</button>
-        </div>
-      </div>
-      <div class="header-center">
-        <div class="logo">toki<span>pona</span></div>
-        <div class="tagline">your personal flashcard deck · o kama sona!</div>
-      </div>
-      <div class="tabs">
-        <div class="tab-group-right">
-          <button class="tab" onclick="switchTab('sentences')"><span class="tab-icon">💬</span>sentence</button>
-          <button class="tab" onclick="switchTab('grammar')"><span class="tab-icon">📖</span>grammar</button>
-          <button class="tab" onclick="switchTab('add')"><span class="tab-icon">＋</span>word</button>
-        </div>
-      </div>
-    </header>
-  </footer>
-
-  </div> <!-- end app-wrapper -->
-
 </div>
 
 <div class="toast" id="toast"></div>
@@ -1268,120 +887,6 @@
     words = w || [];
     sentences = s || [];
     rules = r || [];
-    if (words.length === 0 && sentences.length === 0 && rules.length === 0) {
-      words = [
-        { id:'s1', toki:'pona', meaning:'good, simple, peace', category:'adjective' },
-        { id:'s2', toki:'ike', meaning:'bad, evil, complex', category:'adjective' },
-        { id:'s3', toki:'telo', meaning:'water, liquid, fluid', category:'noun' },
-        { id:'s4', toki:'moku', meaning:'food, to eat, to drink', category:'verb' },
-        { id:'s5', toki:'jan', meaning:'person, human, someone', category:'noun' },
-        { id:'s6', toki:'mi', meaning:'I, me, my, we', category:'noun' },
-        { id:'s7', toki:'sina', meaning:'you, your', category:'noun' },
-        { id:'s8', toki:'suli', meaning:'big, important, tall', category:'adjective' },
-        { id:'s9', toki:'olin', meaning:'love, to love', category:'verb' },
-        { id:'s10', toki:'toki', meaning:'language, to speak', category:'verb' },
-        { id:'s11', toki:'lili', meaning:'small, few, young', category:'adjective' },
-        { id:'s12', toki:'lukin', meaning:'to see, to look, eye', category:'verb' },
-        { id:'s13', toki:'sona', meaning:'knowledge, to know', category:'verb' },
-        { id:'s14', toki:'wile', meaning:'to want, to need', category:'verb' },
-        { id:'s15', toki:'kama', meaning:'to come, to become', category:'verb' },
-        { id:'s16', toki:'pilin', meaning:'to feel, heart, emotion', category:'verb' },
-        { id:'s17', toki:'ona', meaning:'he, she, it, they', category:'noun' },
-        { id:'s18', toki:'ni', meaning:'this, that', category:'noun' },
-        { id:'s19', toki:'ala', meaning:'no, not, zero, nothing', category:'particle' },
-        { id:'s20', toki:'ale', meaning:'all, every, universe', category:'noun' },
-        { id:'s21', toki:'ante', meaning:'different, to change', category:'adjective' },
-        { id:'s22', toki:'awen', meaning:'to stay, to wait, to keep', category:'verb' },
-        { id:'s23', toki:'e', meaning:'marks direct object', category:'particle' },
-        { id:'s24', toki:'en', meaning:'and (between subjects)', category:'particle' },
-        { id:'s25', toki:'esun', meaning:'market, trade, to buy', category:'noun' },
-        { id:'s26', toki:'ijo', meaning:'thing, object, matter', category:'noun' },
-        { id:'s27', toki:'ilo', meaning:'tool, device, machine', category:'noun' },
-        { id:'s28', toki:'insa', meaning:'inside, centre, stomach', category:'noun' },
-        { id:'s29', toki:'jaki', meaning:'dirty, gross, toxic', category:'adjective' },
-        { id:'s30', toki:'jo', meaning:'to have, to carry', category:'verb' },
-        { id:'s31', toki:'kala', meaning:'fish, sea creature', category:'noun' },
-        { id:'s32', toki:'kalama', meaning:'sound, to make noise', category:'noun' },
-        { id:'s33', toki:'kasi', meaning:'plant, herb, tree', category:'noun' },
-        { id:'s34', toki:'ken', meaning:'can, able to, possible', category:'verb' },
-        { id:'s35', toki:'kepeken', meaning:'to use, using, with', category:'preposition' },
-        { id:'s36', toki:'kili', meaning:'fruit, vegetable', category:'noun' },
-        { id:'s37', toki:'kiwen', meaning:'hard, solid, rock, metal', category:'noun' },
-        { id:'s38', toki:'ko', meaning:'powder, clay, paste', category:'noun' },
-        { id:'s39', toki:'kon', meaning:'air, spirit, breath', category:'noun' },
-        { id:'s40', toki:'kule', meaning:'colour, paint, pigment', category:'noun' },
-        { id:'s41', toki:'kulupu', meaning:'group, community, team', category:'noun' },
-        { id:'s42', toki:'kute', meaning:'to hear, to listen, ear', category:'verb' },
-        { id:'s43', toki:'la', meaning:'context separator', category:'particle' },
-        { id:'s44', toki:'lape', meaning:'to sleep, to rest', category:'verb' },
-        { id:'s45', toki:'laso', meaning:'blue, green', category:'adjective' },
-        { id:'s46', toki:'lawa', meaning:'head, leader, to control', category:'noun' },
-        { id:'s47', toki:'len', meaning:'cloth, clothing, to cover', category:'noun' },
-        { id:'s48', toki:'lete', meaning:'cold, raw, uncooked', category:'adjective' },
-        { id:'s49', toki:'li', meaning:'predicate marker', category:'particle' },
-        { id:'s50', toki:'linja', meaning:'line, string, hair', category:'noun' },
-        { id:'s51', toki:'lipu', meaning:'flat object, book, paper', category:'noun' },
-        { id:'s52', toki:'loje', meaning:'red, orange-red', category:'adjective' },
-        { id:'s53', toki:'lon', meaning:'at, in, true, existing', category:'preposition' },
-        { id:'s54', toki:'luka', meaning:'hand, arm, five', category:'noun' },
-        { id:'s55', toki:'lupa', meaning:'hole, door, window', category:'noun' },
-        { id:'s56', toki:'ma', meaning:'land, earth, place', category:'noun' },
-        { id:'s57', toki:'mama', meaning:'parent, ancestor, creator', category:'noun' },
-        { id:'s58', toki:'mani', meaning:'money, wealth, livestock', category:'noun' },
-        { id:'s59', toki:'meli', meaning:'woman, female', category:'noun' },
-        { id:'s60', toki:'mije', meaning:'man, male', category:'noun' },
-        { id:'s61', toki:'moli', meaning:'death, to die, to kill', category:'noun' },
-        { id:'s62', toki:'monsi', meaning:'back, behind, rear', category:'noun' },
-        { id:'s63', toki:'mu', meaning:'animal sound, moo, woof', category:'other' },
-        { id:'s64', toki:'mun', meaning:'moon, star, glow', category:'noun' },
-        { id:'s65', toki:'musi', meaning:'fun, game, art, to play', category:'adjective' },
-        { id:'s66', toki:'mute', meaning:'many, very, more, plural', category:'adjective' },
-        { id:'s67', toki:'nanpa', meaning:'number, to count', category:'noun' },
-        { id:'s68', toki:'nasa', meaning:'strange, drunk, silly', category:'adjective' },
-        { id:'s69', toki:'nasin', meaning:'path, road, method, way', category:'noun' },
-        { id:'s70', toki:'nena', meaning:'bump, nose, mountain', category:'noun' },
-        { id:'s71', toki:'o', meaning:'hey! oh! imperative marker', category:'particle' },
-        { id:'s72', toki:'olin', meaning:'love, compassion, affection', category:'verb' },
-        { id:'s73', toki:'open', meaning:'to open, to begin, on', category:'verb' },
-        { id:'s74', toki:'pakala', meaning:'broken, to damage, oops', category:'adjective' },
-        { id:'s75', toki:'pali', meaning:'to do, to make, to work', category:'verb' },
-        { id:'s76', toki:'palisa', meaning:'long hard object, stick', category:'noun' },
-        { id:'s77', toki:'pan', meaning:'grain, bread, rice', category:'noun' },
-        { id:'s78', toki:'pana', meaning:'to give, to send, to share', category:'verb' },
-        { id:'s79', toki:'pi', meaning:'of, groups modifiers', category:'particle' },
-        { id:'s80', toki:'pipi', meaning:'bug, insect, spider', category:'noun' },
-        { id:'s81', toki:'poka', meaning:'side, hip, beside', category:'noun' },
-        { id:'s82', toki:'poki', meaning:'container, box, bowl', category:'noun' },
-        { id:'s83', toki:'powe', meaning:'false, to lie, to trick', category:'adjective' },
-        { id:'s84', toki:'sama', meaning:'same, similar, like, as', category:'adjective' },
-        { id:'s85', toki:'seli', meaning:'fire, heat, warm', category:'noun' },
-        { id:'s86', toki:'selo', meaning:'outer form, skin, shell', category:'noun' },
-        { id:'s87', toki:'seme', meaning:'what, which, who', category:'other' },
-        { id:'s88', toki:'sewi', meaning:'sky, above, divine, holy', category:'noun' },
-        { id:'s89', toki:'sijelo', meaning:'body, physical state', category:'noun' },
-        { id:'s90', toki:'sike', meaning:'circle, ball, round', category:'noun' },
-        { id:'s91', toki:'sin', meaning:'new, fresh, another', category:'adjective' },
-        { id:'s92', toki:'sinpin', meaning:'face, front, wall', category:'noun' },
-        { id:'s93', toki:'sitelen', meaning:'image, symbol, to draw', category:'noun' },
-        { id:'s94', toki:'supa', meaning:'flat surface, table, floor', category:'noun' },
-        { id:'s95', toki:'suwi', meaning:'sweet, cute, gentle', category:'adjective' },
-        { id:'s96', toki:'tan', meaning:'from, because of, cause', category:'preposition' },
-        { id:'s97', toki:'taso', meaning:'but, only, however', category:'particle' },
-        { id:'s98', toki:'tawa', meaning:'to, towards, moving, for', category:'preposition' },
-        { id:'s99', toki:'tenpo', meaning:'time, period, moment', category:'noun' },
-        { id:'s100', toki:'tomo', meaning:'house, room, building', category:'noun' },
-        { id:'s101', toki:'tu', meaning:'two, to split, pair', category:'noun' },
-        { id:'s102', toki:'unpa', meaning:'sex, to have sex with', category:'verb' },
-        { id:'s103', toki:'uta', meaning:'mouth, lips, oral', category:'noun' },
-        { id:'s104', toki:'utala', meaning:'battle, to fight, challenge', category:'noun' },
-        { id:'s105', toki:'walo', meaning:'white, light, pale', category:'adjective' },
-        { id:'s106', toki:'wan', meaning:'one, united, unique', category:'noun' },
-        { id:'s107', toki:'waso', meaning:'bird, flying creature', category:'noun' },
-        { id:'s108', toki:'wawa', meaning:'strong, power, energy', category:'adjective' },
-        { id:'s109', toki:'weka', meaning:'absent, away, to remove', category:'adjective' },
-        { id:'s110', toki:'wile', meaning:'to want, to need, must', category:'verb' },
-      ];
-    }
     initDeck();
     renderWordList();
     renderSentenceList();
@@ -1389,9 +894,7 @@
     showToast(`loaded ${words.length} words & ${sentences.length} sentences 🌱`);
   }
 
-  // ── FLASHCARD HAND ───────────────────────────────────────
-  const HAND_SIZE = 15;
-
+  // ── FLASHCARD ───────────────────────────────────────────
   function initDeck() {
     const allCards = [
       ...words.map(w => ({ type: 'word', front: w.toki, back: w.meaning, category: w.category })),
@@ -1399,7 +902,6 @@
       ...rules.map(r => ({ type: 'rule', front: r.rule, back: r.translation, category: 'rule' })),
     ];
     if (allCards.length === 0) {
-      document.getElementById('cardHandArea').style.display = 'none';
       document.getElementById('cardScene').style.display = 'none';
       document.getElementById('flipHint').style.display = 'none';
       document.getElementById('skipBtn').style.display = 'none';
@@ -1414,354 +916,18 @@
     }
     const empty = document.getElementById('emptyState');
     if (empty) empty.style.display = 'none';
+    document.getElementById('cardScene').style.display = '';
+    document.getElementById('flipHint').style.display = '';
+    document.getElementById('skipBtn').style.display = '';
     deck = shuffle(allCards);
     currentIndex = 0;
     known = 0;
     dontKnow = 0;
     isFlipped = false;
-    fanOffset = 0;
-    fanScrollPos = 0;
-    stopFanSpin();
+    updateCard();
     updateStats();
     document.getElementById('completion').classList.remove('show');
-    document.getElementById('cardScene').style.display = 'none';
-    document.getElementById('flipHint').style.display = 'none';
-    document.getElementById('skipBtn').style.display = 'none';
-    document.getElementById('answerBtns').style.display = 'none';
-    if (window.innerWidth < 600) {
-      document.getElementById('cardHandArea').style.display = 'none';
-      renderMobileCarousel();
-    } else {
-      document.getElementById('mobileCarousel').style.display = 'none';
-      renderHand();
-    }
-    updateProgressBar();
   }
-
-  let activeCardEl = null;
-  let activeCardIdx = null;
-  let activeCardFlipped = false;
-  let fanOffset = 0;
-  let fanSpinRAF = null;
-  let fanSpinSpeed = 0;
-  let fanScrollPos = 0;
-
-  function startFanSpin(speed) {
-    fanSpinSpeed = speed;
-    if (fanSpinRAF) return;
-    function spin() {
-      if (Math.abs(fanSpinSpeed) < 0.001) { stopFanSpin(); return; }
-      fanScrollPos += fanSpinSpeed;
-      const isMobile = window.innerWidth < 600;
-      const visibleCount = isMobile ? 7 : 15;
-      const step = Math.floor(fanScrollPos);
-      if (Math.abs(step) >= 1) {
-        fanScrollPos -= step;
-        fanOffset = Math.max(0, Math.min(deck.length - visibleCount, fanOffset + step));
-        renderHand();
-      }
-      fanSpinRAF = requestAnimationFrame(spin);
-    }
-    fanSpinRAF = requestAnimationFrame(spin);
-  }
-
-  function stopFanSpin() {
-    fanSpinSpeed = 0;
-    if (fanSpinRAF) { cancelAnimationFrame(fanSpinRAF); fanSpinRAF = null; }
-  }
-
-  let carouselIdx = 0;
-  let carouselCards = [];
-  let carouselFlipped = false;
-  let carouselTouchStartY = 0;
-
-  function renderMobileCarousel() {
-    const carousel = document.getElementById('mobileCarousel');
-    carousel.style.display = 'flex';
-    const track = document.getElementById('carouselTrack');
-    track.innerHTML = '';
-    carouselCards = deck.slice(currentIndex);
-    carouselIdx = 0;
-    carouselFlipped = false;
-    if (carouselCards.length === 0) { showCompletion(); return; }
-    renderCarouselCards(track);
-
-    // swipe detection
-    carousel.ontouchstart = (e) => { carouselTouchStartY = e.touches[0].clientY; };
-    carousel.ontouchend = (e) => {
-      const diff = carouselTouchStartY - e.changedTouches[0].clientY;
-      if (Math.abs(diff) > 40) {
-        if (diff > 0) carouselNext(); // swipe up = next
-        else carouselPrev();          // swipe down = prev
-      }
-    };
-  }
-
-  function renderCarouselCards(track) {
-    track.innerHTML = '';
-    const typeColors = { word: '#9b6fff', sentence: '#3a6fff', rule: '#c8d0f0' };
-    const total = carouselCards.length;
-
-    // show current + 1 above + 1 below as peek
-    for (let offset = -1; offset <= 1; offset++) {
-      const idx = carouselIdx + offset;
-      if (idx < 0 || idx >= total) continue;
-      const card = carouselCards[idx];
-      const color = typeColors[card.type] || '#9b6fff';
-      const isCurrent = offset === 0;
-
-      const el = document.createElement('div');
-      el.className = 'carousel-card' + (isCurrent && carouselFlipped ? ' flipped' : '');
-
-      const scale = isCurrent ? 1 : 0.88;
-      const translateY = offset * 92;
-      const op = isCurrent ? 1 : 0.45;
-      el.style.cssText = `transform: translateY(${translateY}%) scale(${scale}); opacity: ${op}; z-index: ${isCurrent ? 2 : 1};`;
-      if (isCurrent) {
-        el.style.borderColor = `${color}55`;
-        el.style.boxShadow = `0 0 32px ${color}22`;
-      }
-
-      el.innerHTML = `
-        <div class="cc-front">
-          <div class="cc-label">${card.type}</div>
-          <div class="cc-word" style="color:${color};text-shadow:0 0 16px ${color};">${card.front}</div>
-          <div class="cc-hint">tap to reveal · swipe to navigate</div>
-        </div>
-        <div class="cc-back">
-          <div class="cc-label">meaning</div>
-          <div class="cc-word" style="color:#c8d0f0;text-shadow:0 0 14px #c8d0f0;font-size:1.2rem;">${card.back}</div>
-          <div class="cc-meaning">${card.category || ''}</div>
-          <div class="carousel-btns">
-            <button class="carousel-btn carousel-btn-learn" onclick="carouselAnswer(false)">✗ learning</button>
-            <button class="carousel-btn carousel-btn-know" onclick="carouselAnswer(true)">✓ know it</button>
-          </div>
-        </div>
-      `;
-
-      if (isCurrent) {
-        el.addEventListener('click', (e) => {
-          if (e.target.classList.contains('carousel-btn')) return;
-          carouselFlipped = !carouselFlipped;
-          renderCarouselCards(track);
-        });
-      } else {
-        // tap adjacent card to navigate
-        el.addEventListener('click', () => {
-          if (offset > 0) carouselNext();
-          else carouselPrev();
-        });
-      }
-
-      track.appendChild(el);
-    }
-  }
-
-  function carouselNext() {
-    if (carouselIdx < carouselCards.length - 1) {
-      carouselIdx++;
-      carouselFlipped = false;
-      renderCarouselCards(document.getElementById('carouselTrack'));
-    } else { showCompletion(); }
-  }
-
-  function carouselPrev() {
-    if (carouselIdx > 0) {
-      carouselIdx--;
-      carouselFlipped = false;
-      renderCarouselCards(document.getElementById('carouselTrack'));
-    }
-  }
-
-  function carouselAnswer(didKnow) {
-    if (didKnow) known++; else dontKnow++;
-    currentIndex++;
-    updateStats();
-    updateProgressBar();
-    carouselNext();
-  }
-
-  function mobileAnswer(btn, didKnow) {
-    if (didKnow) known++; else dontKnow++;
-    currentIndex++;
-    updateStats();
-    updateProgressBar();
-    const card = btn.closest('.stack-card');
-    card.classList.add('done');
-    setTimeout(() => card.remove(), 400);
-    if (currentIndex >= deck.length) showCompletion();
-  }
-
-  function renderHand() {
-    const area = document.getElementById('cardHandArea');
-    area.style.display = 'flex';
-    area.innerHTML = '';
-    activeCardEl = null;
-    activeCardIdx = null;
-    activeCardFlipped = false;
-    document.getElementById('answerBtns').style.display = 'none';
-    document.getElementById('skipBtn').style.display = 'none';
-    document.getElementById('flipHint').style.display = 'none';
-
-    const allRemaining = deck.slice(currentIndex);
-    if (allRemaining.length === 0) { showCompletion(); return; }
-
-    const count = allRemaining.length;
-    const isMobile = window.innerWidth < 600;
-    const visibleCount = Math.min(count, isMobile ? 7 : 15);
-    const radius = isMobile ? window.innerWidth * 1.1 : window.innerWidth * 0.55;
-    const totalArc = isMobile ? 80 : 110;
-    const cardW = isMobile ? 70 : 220;
-    const cardH = isMobile ? 50 : 150;
-    const typeColors = { word: '#9b6fff', sentence: '#3a6fff', rule: '#c8d0f0' };
-
-    // clamp fanOffset
-    fanOffset = Math.max(0, Math.min(Math.max(0, count - visibleCount), fanOffset));
-    const visibleCards = allRemaining.slice(fanOffset, fanOffset + visibleCount);
-
-    // mousemove — spin fan when near edges
-    area.onmousemove = (e) => {
-      const rect = area.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const w = rect.width;
-      const edgeZone = w * 0.22;
-      if (x < edgeZone) {
-        const strength = (1 - x / edgeZone);
-        startFanSpin(-(strength * 0.05));
-      } else if (x > w - edgeZone) {
-        const strength = (x - (w - edgeZone)) / edgeZone;
-        startFanSpin(strength * 0.05);
-      } else {
-        stopFanSpin();
-      }
-    };
-    area.onmouseleave = () => stopFanSpin();
-
-    for (let i = 0; i < visibleCards.length; i++) {
-      const card = visibleCards[i];
-      const deckIdx = currentIndex + fanOffset + i;
-      const t = visibleCards.length === 1 ? 0.5 : i / (visibleCards.length - 1);
-      const angleDeg = -90 - totalArc / 2 + t * totalArc;
-      const angleRad = (angleDeg * Math.PI) / 180;
-      const tx = Math.cos(angleRad) * radius;
-      const ty = Math.sin(angleRad) * radius + radius * (isMobile ? 0.85 : 1);
-      const rot = angleDeg + 90;
-
-      const distFromCenter = Math.abs(t - 0.5) * 2;
-      const opacity = Math.max(0.08, 1 - distFromCenter * 0.92);
-      const scale = Math.max(0.6, 1 - distFromCenter * 0.38);
-      const zIndex = Math.round((1 - distFromCenter) * 20);
-
-      const color = typeColors[card.type] || '#9b6fff';
-
-      // wrapper for 3D flip
-      const wrapper = document.createElement('div');
-      wrapper.style.cssText = `position:absolute;width:${cardW}px;height:${cardH}px;transform-style:preserve-3d;transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);transform:translate(${tx}px,${ty}px) rotate(${rot}deg) scale(${scale});opacity:${opacity};z-index:${zIndex};`;
-
-      // front face
-      const front = document.createElement('div');
-      front.className = 'hand-card';
-      front.style.cssText = `position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;cursor:pointer;`;
-      if (distFromCenter < 0.5) {
-        front.innerHTML = `
-          <div class="hc-label">${card.type}</div>
-          <div class="hc-word" style="color:${color};text-shadow:0 0 14px ${color};">${card.front}</div>
-          <div class="hc-meaning">${card.back}</div>
-          <div class="hc-hint">tap to flip</div>`;
-      } else {
-        front.innerHTML = `<div class="hc-word" style="color:${color};text-shadow:0 0 10px ${color};font-size:1.1rem;opacity:0.6;">${card.front}</div>`;
-      }
-
-      // back face
-      const back = document.createElement('div');
-      back.className = 'hand-card';
-      back.style.cssText = `position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:rotateY(180deg);border-color:rgba(155,111,255,0.5);`;
-      back.innerHTML = `
-        <div class="hc-label">english</div>
-        <div class="hc-word" style="color:#c8d0f0;text-shadow:0 0 14px #c8d0f0;font-size:1rem;">${card.back}</div>
-        <div class="hc-label" style="margin-top:8px;margin-bottom:0;">${card.category || ''}</div>`;
-
-      wrapper.appendChild(front);
-      wrapper.appendChild(back);
-      wrapper._baseTransform = `translate(${tx}px,${ty}px) rotate(${rot}deg) scale(${scale})`;
-      wrapper._baseOpacity = opacity;
-      wrapper._baseZ = zIndex;
-
-      // hover
-      wrapper.addEventListener('mouseenter', () => {
-        if (activeCardIdx === deckIdx) return;
-        const liftAmount = 18 + distFromCenter * 40; // edges lift more
-        const liftX = Math.cos(angleRad) * liftAmount;
-        const liftY = Math.sin(angleRad) * liftAmount;
-        const hoverScale = scale * (1 + 0.15 - distFromCenter * 0.05);
-        const hoverOpacity = Math.min(1, opacity + 0.5 + distFromCenter * 0.3);
-        wrapper.style.transform = `translate(${tx + liftX}px,${ty + liftY}px) rotate(${rot}deg) scale(${hoverScale})`;
-        wrapper.style.opacity = hoverOpacity;
-        wrapper.style.zIndex = 30;
-        front.style.borderColor = `${color}cc`;
-        front.style.boxShadow = `0 20px 48px ${color}55`;
-      });
-      wrapper.addEventListener('mouseleave', () => {
-        if (activeCardIdx === deckIdx) return;
-        wrapper.style.transform = `translate(${tx}px,${ty}px) rotate(${rot}deg) scale(${scale})`;
-        wrapper.style.opacity = opacity;
-        wrapper.style.zIndex = zIndex;
-        front.style.borderColor = 'rgba(123,143,255,0.3)';
-        front.style.boxShadow = '0 8px 24px rgba(0,0,0,0.5)';
-      });
-
-      // click — flip in place, any card freely clickable
-      wrapper.addEventListener('click', () => {
-        // if clicking a different card, reset the previously active one
-        if (activeCardEl && activeCardEl !== wrapper) {
-          activeCardEl.style.transform = activeCardEl._baseTransform;
-          activeCardEl.style.opacity = activeCardEl._baseOpacity;
-          activeCardEl.style.zIndex = activeCardEl._baseZ;
-          activeCardEl.querySelector('.hand-card').style.borderColor = 'rgba(123,143,255,0.3)';
-          activeCardEl.querySelector('.hand-card').style.boxShadow = '0 8px 24px rgba(0,0,0,0.5)';
-          document.getElementById('answerBtns').style.display = 'none';
-          document.getElementById('skipBtn').style.display = 'none';
-        }
-
-        const liftX = Math.cos(angleRad) * 40;
-        const liftY = Math.sin(angleRad) * 40;
-        const liftedTransform = `translate(${tx + liftX}px,${ty + liftY}px) rotate(${rot}deg) scale(${scale * 1.15})`;
-
-        if (activeCardIdx === deckIdx && activeCardFlipped) {
-          // already flipped — unflip
-          activeCardFlipped = false;
-          wrapper.style.transform = liftedTransform;
-          document.getElementById('answerBtns').style.display = 'none';
-          document.getElementById('skipBtn').style.display = 'none';
-        } else if (activeCardIdx === deckIdx && !activeCardFlipped) {
-          // already lifted — flip it
-          activeCardFlipped = true;
-          wrapper.style.transform = liftedTransform + ' rotateY(180deg)';
-          currentIndex = deckIdx;
-          updateStats();
-          updateProgressBar();
-          document.getElementById('answerBtns').style.display = 'grid';
-          document.getElementById('skipBtn').style.display = '';
-        } else {
-          // new card — just lift it
-          activeCardEl = wrapper;
-          activeCardIdx = deckIdx;
-          activeCardFlipped = false;
-          wrapper.style.transform = liftedTransform;
-          wrapper.style.opacity = 1;
-          wrapper.style.zIndex = 50;
-          front.style.borderColor = `${color}`;
-          front.style.boxShadow = `0 24px 60px ${color}66`;
-          document.getElementById('answerBtns').style.display = 'none';
-          document.getElementById('skipBtn').style.display = 'none';
-        }
-      });
-
-      area.appendChild(wrapper);
-    }
-  }
-
-  function selectCard(idx) { /* handled inline in renderHand */ }
 
   function updateCard() {
     if (currentIndex >= deck.length) { showCompletion(); return; }
@@ -1779,13 +945,9 @@
     document.getElementById('skipBtn').style.display = '';
     document.getElementById('flipHint').style.display = '';
     isFlipped = false;
-    updateProgressBar();
-  }
-
-  function updateProgressBar() {
-    const pct = (currentIndex / (deck.length || 1)) * 100;
+    const pct = (currentIndex / deck.length) * 100;
     document.getElementById('progressFill').style.width = pct + '%';
-    document.getElementById('progressText').textContent = deck.length ? `card ${currentIndex + 1} of ${deck.length}` : 'no cards yet';
+    document.getElementById('progressText').textContent = `card ${currentIndex + 1} of ${deck.length}`;
     document.getElementById('knownCount').textContent = `${known} known`;
   }
 
@@ -1812,22 +974,14 @@
 
   function answer(didKnow) {
     if (didKnow) known++; else dontKnow++;
-    currentIndex = (activeCardIdx !== null ? activeCardIdx : currentIndex) + 1;
+    currentIndex++;
     updateStats();
-    if (window.innerWidth < 600) { renderMobileCarousel(); } else { renderHand(); }
-    updateProgressBar();
+    updateCard();
   }
 
-  function nextCard() {
-    currentIndex = (activeCardIdx !== null ? activeCardIdx : currentIndex) + 1;
-    updateStats();
-    if (window.innerWidth < 600) { renderMobileCarousel(); } else { renderHand(); }
-    updateProgressBar();
-  }
+  function nextCard() { currentIndex++; updateStats(); updateCard(); }
 
   function showCompletion() {
-    document.getElementById('cardHandArea').style.display = 'none';
-    document.getElementById('mobileCarousel').style.display = 'none';
     document.getElementById('cardScene').style.display = 'none';
     document.getElementById('flipHint').style.display = 'none';
     document.getElementById('skipBtn').style.display = 'none';
@@ -2390,11 +1544,6 @@
   function randomGridColor() {
     const color = gridColors[Math.floor(Math.random() * gridColors.length)];
     document.documentElement.style.setProperty('--grid-color', color);
-  }
-
-  function startApp() {
-    document.getElementById('landingPage').style.display = 'none';
-    document.getElementById('appWrapper').style.display = 'block';
   }
 
   // ── INIT ────────────────────────────────────────────────
