@@ -724,28 +724,16 @@
   .app-wrapper { display: none; }
 
   @media (max-width: 600px) {
-    #appFooter {
-      padding: 10px 16px 14px !important;
-    }
-    #appFooter header {
-      flex-direction: column;
-      gap: 8px;
-    }
+    #appFooter { padding: 12px 16px 16px !important; }
+    #appFooter header { gap: 12px; }
     #appFooter .header-center {
-      position: static;
-      transform: none;
-      order: 2;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
     }
-    #appFooter .tabs {
-      display: flex !important;
-      order: 1;
-      width: 100%;
-      justify-content: space-between;
-    }
+    #appFooter .tabs { display: contents; }
     #appFooter .tab-group,
-    #appFooter .tab-group-right {
-      gap: 16px;
-    }
+    #appFooter .tab-group-right { gap: 12px; border: none; background: none; padding: 0; border-radius: 0; }
   }
 </style>
 </head>
