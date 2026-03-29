@@ -722,6 +722,31 @@
     50%       { color: #e8eeff; text-shadow: 0 0 16px rgba(232,238,255,0.8), 0 0 40px rgba(123,143,255,0.3); }
   }
   .app-wrapper { display: none; }
+
+  @media (max-width: 600px) {
+    #appFooter {
+      padding: 10px 16px 14px !important;
+    }
+    #appFooter header {
+      flex-direction: column;
+      gap: 8px;
+    }
+    #appFooter .header-center {
+      position: static;
+      transform: none;
+      order: 2;
+    }
+    #appFooter .tabs {
+      display: flex !important;
+      order: 1;
+      width: 100%;
+      justify-content: space-between;
+    }
+    #appFooter .tab-group,
+    #appFooter .tab-group-right {
+      gap: 16px;
+    }
+  }
 </style>
 </head>
 <body>
