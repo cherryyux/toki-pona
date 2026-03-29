@@ -34,15 +34,14 @@
     overflow-x: hidden;
   }
 
-  /* background grid */
+  /* background sitelen pona — hand drawn sparse */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background-image:
-      linear-gradient(var(--grid-color) 1px, transparent 1px),
-      linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-    background-size: 40px 40px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='900' viewBox='0 0 1200 900'%3E%3Cg fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3C!-- glyph 1 --%3E%3Cpath d='M82 152 Q96 138 113 141 Q128 144 133 158 Q137 172 128 183 Q118 194 104 192 Q89 190 82 178 Q76 165 82 152Z' stroke='%237b8fff' stroke-width='1.8' opacity='0.07'/%3E%3Cpath d='M91 168 Q98 179 108 177 Q117 175 122 165' stroke='%237b8fff' stroke-width='1.8' opacity='0.07'/%3E%3Cpath d='M88 135 Q84 126 81 119' stroke='%237b8fff' stroke-width='1.8' opacity='0.07'/%3E%3Cpath d='M104 132 Q103 123 103 115' stroke='%237b8fff' stroke-width='1.8' opacity='0.07'/%3E%3Cpath d='M119 136 Q124 128 128 121' stroke='%237b8fff' stroke-width='1.8' opacity='0.07'/%3E%3C!-- glyph 2 --%3E%3Cpath d='M472 68 Q484 56 499 58 Q512 60 517 72 Q521 83 514 92 Q506 101 493 100 Q479 99 473 88 Q467 77 472 68Z' stroke='%239b6fff' stroke-width='1.5' opacity='0.06'/%3E%3Cpath d='M479 82 Q485 91 494 90 Q501 89 506 81' stroke='%239b6fff' stroke-width='1.5' opacity='0.06'/%3E%3Cpath d='M477 53 Q474 45 472 38' stroke='%239b6fff' stroke-width='1.5' opacity='0.06'/%3E%3Cpath d='M491 51 Q490 43 490 36' stroke='%239b6fff' stroke-width='1.5' opacity='0.06'/%3E%3Cpath d='M504 54 Q508 46 511 39' stroke='%239b6fff' stroke-width='1.5' opacity='0.06'/%3E%3C!-- glyph 3 --%3E%3Cpath d='M858 240 Q872 226 891 229 Q907 232 913 247 Q918 261 909 273 Q899 284 884 282 Q868 280 861 267 Q854 254 858 240Z' stroke='%237b8fff' stroke-width='2' opacity='0.065'/%3E%3Cpath d='M866 257 Q874 269 886 267 Q896 265 902 255' stroke='%237b8fff' stroke-width='2' opacity='0.065'/%3E%3Cpath d='M864 224 Q860 214 857 206' stroke='%237b8fff' stroke-width='2' opacity='0.065'/%3E%3Cpath d='M880 221 Q879 212 879 204' stroke='%237b8fff' stroke-width='2' opacity='0.065'/%3E%3Cpath d='M896 225 Q901 216 905 208' stroke='%237b8fff' stroke-width='2' opacity='0.065'/%3E%3C!-- glyph 4 --%3E%3Cpath d='M1082 474 Q1098 458 1119 461 Q1137 464 1143 481 Q1149 497 1138 510 Q1127 522 1109 520 Q1091 518 1083 503 Q1075 488 1082 474Z' stroke='%239b6fff' stroke-width='2' opacity='0.055'/%3E%3Cpath d='M1091 493 Q1100 507 1113 505 Q1124 503 1131 491' stroke='%239b6fff' stroke-width='2' opacity='0.055'/%3E%3Cpath d='M1089 457 Q1084 446 1081 437' stroke='%239b6fff' stroke-width='2' opacity='0.055'/%3E%3Cpath d='M1107 454 Q1106 444 1106 436' stroke='%239b6fff' stroke-width='2' opacity='0.055'/%3E%3Cpath d='M1124 458 Q1129 448 1133 440' stroke='%239b6fff' stroke-width='2' opacity='0.055'/%3E%3C!-- glyph 5 small --%3E%3Cpath d='M224 638 Q233 628 244 630 Q254 631 258 640 Q261 649 255 656 Q249 663 239 662 Q229 661 224 653 Q219 644 224 638Z' stroke='%237b8fff' stroke-width='1.5' opacity='0.055'/%3E%3Cpath d='M228 647 Q233 655 240 654 Q246 653 249 646' stroke='%237b8fff' stroke-width='1.5' opacity='0.055'/%3E%3Cpath d='M227 625 Q224 618 222 612' stroke='%237b8fff' stroke-width='1.5' opacity='0.055'/%3E%3Cpath d='M237 623 Q236 616 236 610' stroke='%237b8fff' stroke-width='1.5' opacity='0.055'/%3E%3Cpath d='M246 626 Q249 619 252 613' stroke='%237b8fff' stroke-width='1.5' opacity='0.055'/%3E%3C!-- glyph 6 --%3E%3Cpath d='M638 762 Q651 749 668 752 Q682 754 688 767 Q693 780 685 791 Q676 801 662 800 Q647 798 640 786 Q633 774 638 762Z' stroke='%239b6fff' stroke-width='1.8' opacity='0.06'/%3E%3Cpath d='M645 777 Q653 788 664 787 Q673 786 678 776' stroke='%239b6fff' stroke-width='1.8' opacity='0.06'/%3E%3Cpath d='M644 746 Q640 737 637 729' stroke='%239b6fff' stroke-width='1.8' opacity='0.06'/%3E%3Cpath d='M659 743 Q658 734 658 727' stroke='%239b6fff' stroke-width='1.8' opacity='0.06'/%3E%3Cpath d='M673 746 Q677 737 681 730' stroke='%239b6fff' stroke-width='1.8' opacity='0.06'/%3E%3C!-- glyph 7 tiny --%3E%3Cpath d='M1038 62 Q1046 54 1055 56 Q1063 57 1066 64 Q1069 71 1064 77 Q1059 83 1051 82 Q1043 81 1039 75 Q1035 68 1038 62Z' stroke='%237b8fff' stroke-width='1.5' opacity='0.045'/%3E%3Cpath d='M1041 70 Q1045 77 1051 76 Q1057 75 1059 69' stroke='%237b8fff' stroke-width='1.5' opacity='0.045'/%3E%3Cpath d='M1041 50 Q1039 44 1037 38' stroke='%237b8fff' stroke-width='1.5' opacity='0.045'/%3E%3Cpath d='M1050 48 Q1049 42 1049 37' stroke='%237b8fff' stroke-width='1.5' opacity='0.045'/%3E%3Cpath d='M1058 50 Q1061 44 1063 39' stroke='%237b8fff' stroke-width='1.5' opacity='0.045'/%3E%3C!-- glyph 8 --%3E%3Cpath d='M358 408 Q372 393 391 396 Q408 399 414 414 Q420 429 410 441 Q400 453 383 451 Q366 449 358 436 Q350 422 358 408Z' stroke='%239b6fff' stroke-width='2' opacity='0.05'/%3E%3Cpath d='M366 425 Q375 438 388 436 Q399 434 405 422' stroke='%239b6fff' stroke-width='2' opacity='0.05'/%3E%3Cpath d='M364 391 Q360 381 357 372' stroke='%239b6fff' stroke-width='2' opacity='0.05'/%3E%3Cpath d='M381 389 Q380 379 380 371' stroke='%239b6fff' stroke-width='2' opacity='0.05'/%3E%3Cpath d='M397 392 Q402 382 406 374' stroke='%239b6fff' stroke-width='2' opacity='0.05'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 600px 450px;
+    background-repeat: repeat;
     pointer-events: none;
     z-index: 0;
   }
@@ -105,39 +104,34 @@
   }
 
   .tab.active {
-    background: #111;
-    color: var(--neon-green);
-    box-shadow: 0 0 12px rgba(123,143,255,0.15);
-    border: 1px solid rgba(123,143,255,0.2);
+    color: #e8eeff;
+    text-shadow: 0 0 14px rgba(155,111,255,0.9), 0 0 30px rgba(155,111,255,0.4);
   }
 
   /* PROGRESS BAR */
-  .progress-wrap {
-    margin-bottom: 20px;
-  }
+  .progress-wrap { margin-bottom: 8px; }
 
   .progress-info {
     display: flex;
     justify-content: space-between;
-    font-size: 0.65rem;
+    font-size: 0.52rem;
     color: var(--muted2);
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
   }
 
   .progress-bar {
-    height: 3px;
-    background: var(--border);
-    border-radius: 2px;
+    height: 1px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 1px;
     overflow: hidden;
   }
 
   .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--neon-green), var(--neon-cyan));
-    box-shadow: 0 0 8px var(--neon-green);
-    border-radius: 2px;
+    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+    border-radius: 1px;
     transition: width 0.4s ease;
   }
 
@@ -145,13 +139,16 @@
   .card-scene {
     perspective: 1000px;
     margin-bottom: 20px;
+    margin-top: 32px;
     cursor: pointer;
   }
 
   .card-inner {
     position: relative;
     width: 100%;
-    height: 260px;
+    max-width: 320px;
+    margin: 0 auto;
+    height: 220px;
     transform-style: preserve-3d;
     transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -170,7 +167,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 32px;
+    padding: 32px 24px;
     border: 1px solid var(--border);
     background: var(--card-bg);
     text-align: center;
@@ -178,17 +175,17 @@
 
   .card-front {
     border-color: rgba(123,143,255,0.2);
-    box-shadow: 0 0 30px rgba(123,143,255,0.05), inset 0 0 40px rgba(123,143,255,0.02);
+    box-shadow: 0 0 30px rgba(123,143,255,0.05);
   }
 
   .card-back {
     transform: rotateY(180deg);
     border-color: rgba(155,111,255,0.2);
-    box-shadow: 0 0 30px rgba(155,111,255,0.05), inset 0 0 40px rgba(0,255,238,0.02);
+    box-shadow: 0 0 30px rgba(155,111,255,0.05);
   }
 
   .card-label {
-    font-size: 0.6rem;
+    font-size: 0.48rem;
     letter-spacing: 0.25em;
     text-transform: uppercase;
     color: var(--muted2);
@@ -197,7 +194,7 @@
 
   .card-word {
     font-family: 'Syne', sans-serif;
-    font-size: clamp(2.5rem, 10vw, 4rem);
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
     font-weight: 800;
     color: var(--neon-green);
     text-shadow: 0 0 20px var(--neon-green);
@@ -207,27 +204,24 @@
   }
 
   .card-back .card-word {
-    font-size: clamp(1.6rem, 6vw, 2.4rem);
+    font-size: clamp(0.55rem, 1.5vw, 0.72rem);
     color: var(--neon-cyan);
     text-shadow: 0 0 20px var(--neon-cyan);
   }
 
   .card-hint {
-    font-size: 0.72rem;
+    font-size: 0.55rem;
     color: var(--muted2);
     font-style: italic;
   }
 
   .card-category {
     display: inline-block;
-    margin-top: 16px;
-    font-size: 0.6rem;
-    letter-spacing: 0.15em;
+    margin-top: 10px;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    padding: 4px 12px;
-    border-radius: 20px;
-    border: 1px solid rgba(200,208,240,0.3);
-    color: var(--neon-orange);
+    color: var(--muted2);
   }
 
   .flip-hint {
@@ -256,7 +250,7 @@
   .btn {
     padding: 14px;
     border-radius: 12px;
-    border: 1px solid;
+    border: none;
     background: transparent;
     font-family: 'Space Mono', monospace;
     font-size: 0.75rem;
@@ -267,28 +261,30 @@
   }
 
   .btn-know {
-    border-color: rgba(123,143,255,0.3);
     color: var(--neon-green);
   }
-  .btn-know:hover {
-    background: rgba(123,143,255,0.08);
-    box-shadow: 0 0 16px rgba(123,143,255,0.2);
+  .btn-know { animation: pulse-know 3s ease-in-out infinite; }
+  .btn-know:hover { animation: none; text-shadow: 0 0 20px rgba(232,238,255,1), 0 0 50px rgba(123,143,255,0.7); opacity: 1; }
+  @keyframes pulse-know {
+    0%, 100% { opacity: 0.5; text-shadow: none; }
+    50% { opacity: 1; text-shadow: 0 0 18px rgba(232,238,255,0.8), 0 0 40px rgba(123,143,255,0.4); }
   }
 
   .btn-dontknow {
-    border-color: rgba(58,111,255,0.3);
     color: var(--neon-pink);
   }
-  .btn-dontknow:hover {
-    background: rgba(58,111,255,0.08);
-    box-shadow: 0 0 16px rgba(58,111,255,0.2);
+  .btn-dontknow { animation: pulse-learn 3s ease-in-out 1s infinite; }
+  .btn-dontknow:hover { animation: none; text-shadow: 0 0 20px rgba(155,111,255,1), 0 0 50px rgba(155,111,255,0.7); opacity: 1; }
+  @keyframes pulse-learn {
+    0%, 100% { opacity: 0.5; text-shadow: none; }
+    50% { opacity: 1; text-shadow: 0 0 18px rgba(155,111,255,0.8), 0 0 40px rgba(155,111,255,0.4); }
   }
 
   .btn-next {
     width: 100%;
     padding: 14px;
     border-radius: 12px;
-    border: 1px solid rgba(155,111,255,0.3);
+    border: none;
     background: transparent;
     color: var(--neon-cyan);
     font-family: 'Space Mono', monospace;
@@ -297,35 +293,35 @@
     text-transform: uppercase;
     cursor: pointer;
     transition: all 0.2s;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
   }
-  .btn-next:hover {
-    background: rgba(155,111,255,0.08);
-    box-shadow: 0 0 16px rgba(155,111,255,0.2);
+  .btn-next { animation: pulse-skip 3s ease-in-out 0.5s infinite; }
+  .btn-next:hover { animation: none; text-shadow: 0 0 20px rgba(123,143,255,1), 0 0 50px rgba(155,111,255,0.7); opacity: 1; }
+  @keyframes pulse-skip {
+    0%, 100% { opacity: 0.5; text-shadow: none; }
+    50% { opacity: 1; text-shadow: 0 0 18px rgba(123,143,255,0.8), 0 0 40px rgba(155,111,255,0.4); }
   }
 
   /* STATS ROW */
   .stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    margin-bottom: 28px;
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
 
   .stat-box {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px 10px;
-    text-align: center;
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
   }
 
   .stat-num {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.6rem;
-    font-weight: 800;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 700;
     line-height: 1;
-    margin-bottom: 4px;
   }
 
   .stat-label {
@@ -343,7 +339,7 @@
 
   .quiz-word {
     font-family: 'Syne', sans-serif;
-    font-size: clamp(2rem, 8vw, 3.5rem);
+    font-size: clamp(1.2rem, 5vw, 2rem);
     font-weight: 800;
     color: var(--neon-green);
     text-shadow: 0 0 20px var(--neon-green);
@@ -374,7 +370,7 @@
     background: var(--card-bg);
     color: var(--text);
     font-family: 'Space Mono', monospace;
-    font-size: 0.75rem;
+    font-size: 0.62rem;
     cursor: pointer;
     transition: all 0.2s;
     text-align: center;
@@ -411,7 +407,7 @@
   }
 
   .input-label {
-    font-size: 0.62rem;
+    font-size: 0.52rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--muted2);
@@ -421,13 +417,13 @@
 
   .input-field {
     width: 100%;
-    padding: 12px 16px;
+    padding: 10px 14px;
     background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 10px;
     color: var(--text);
     font-family: 'Space Mono', monospace;
-    font-size: 0.85rem;
+    font-size: 0.72rem;
     outline: none;
     transition: border-color 0.2s;
   }
@@ -445,7 +441,7 @@
     border-radius: 10px;
     color: var(--text);
     font-family: 'Space Mono', monospace;
-    font-size: 0.85rem;
+    font-size: 0.72rem;
     outline: none;
     cursor: pointer;
   }
@@ -454,11 +450,11 @@
     width: 100%;
     padding: 14px;
     border-radius: 12px;
-    border: 1px solid rgba(123,143,255,0.4);
-    background: rgba(123,143,255,0.05);
+    border: none;
+    background: transparent;
     color: var(--neon-green);
     font-family: 'Space Mono', monospace;
-    font-size: 0.8rem;
+    font-size: 0.65rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     cursor: pointer;
@@ -466,10 +462,7 @@
     margin-top: 8px;
   }
 
-  .btn-add:hover {
-    background: rgba(123,143,255,0.1);
-    box-shadow: 0 0 20px rgba(123,143,255,0.2);
-  }
+  .btn-add:hover { text-shadow: 0 0 16px rgba(123,143,255,0.8); }
 
   .word-list {
     margin-top: 24px;
@@ -484,11 +477,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 14px;
+    padding: 8px 12px;
     background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 10px;
-    font-size: 0.75rem;
+    font-size: 0.65rem;
   }
 
   .word-item-toki { color: var(--neon-pink); font-weight: 700; }
@@ -531,7 +524,7 @@
   .btn-restart {
     padding: 14px 32px;
     border-radius: 12px;
-    border: 1px solid rgba(123,143,255,0.4);
+    border: none;
     background: transparent;
     color: var(--neon-green);
     font-family: 'Space Mono', monospace;
@@ -541,10 +534,7 @@
     cursor: pointer;
     transition: all 0.2s;
   }
-  .btn-restart:hover {
-    background: rgba(123,143,255,0.08);
-    box-shadow: 0 0 20px rgba(123,143,255,0.2);
-  }
+  .btn-restart:hover { text-shadow: 0 0 16px rgba(123,143,255,0.8); }
 
   .toast {
     position: fixed;
@@ -564,23 +554,195 @@
     white-space: nowrap;
   }
   .toast.show { transform: translateX(-50%) translateY(0); }
+  /* HEADER NAV */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    width: 100%;
+    position: relative;
+  }
+  .header-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    pointer-events: none;
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #d8dce8;
+    text-shadow: 0 0 14px rgba(255,255,255,0.7), 0 0 50px rgba(255,255,255,0.35);
+    line-height: 1;
+  }
+  .logo span {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 20px var(--neon-cyan), 0 0 60px rgba(155,111,255,0.3);
+  }
+  .tabs { display: contents; }
+  .tab-group, .tab-group-right { display: flex; gap: 24px; align-items: center; }
+  .tab {
+    background: none; border: none;
+    color: var(--muted2);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.18em;
+    text-transform: uppercase; cursor: pointer;
+    transition: color 0.2s; padding: 0;
+    user-select: none;
+  }
+  .tab .tab-icon { display: none; }
+  .tab:hover { color: #d8dce8; }
+  .tab.active { color: #e8eeff; text-shadow: 0 0 14px rgba(155,111,255,0.9), 0 0 30px rgba(155,111,255,0.4); }
+
+  /* LANDING PAGE */
+  .landing {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; padding: 40px 24px;
+    position: relative; z-index: 1;
+  }
+  .landing-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3rem, 12vw, 6rem);
+    font-weight: 800; letter-spacing: -2px;
+    color: #d8dce8; line-height: 1; margin-bottom: 8px;
+    animation: pulse-white 4s ease-in-out infinite;
+  }
+  .landing-logo span { color: var(--neon-cyan); animation: pulse-cyan 4s ease-in-out 1.5s infinite; }
+  @keyframes pulse-white {
+    0%, 100% { text-shadow: 0 0 10px rgba(255,255,255,0.4), 0 0 30px rgba(255,255,255,0.15); }
+    50%       { text-shadow: 0 0 20px rgba(255,255,255,0.9), 0 0 60px rgba(255,255,255,0.4), 0 0 100px rgba(200,208,240,0.2); }
+  }
+  @keyframes pulse-cyan {
+    0%, 100% { text-shadow: 0 0 10px rgba(123,143,255,0.4), 0 0 30px rgba(123,143,255,0.15); }
+    50%       { text-shadow: 0 0 20px var(--neon-cyan), 0 0 60px rgba(155,111,255,0.5), 0 0 100px rgba(123,143,255,0.2); }
+  }
+  .landing-sub { font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted2); margin-bottom: 64px; }
+  .landing-about { max-width: 480px; margin-bottom: 56px; }
+  .landing-about p { font-size: 0.85rem; line-height: 1.9; color: #888; margin-bottom: 16px; }
+  .landing-about p:last-child { margin-bottom: 0; }
+  .landing-about strong { color: var(--neon-cyan); font-weight: 700; }
+  .landing-divider { width: 40px; height: 1px; background: rgba(123,143,255,0.3); margin: 0 auto 32px; }
+  .btn-start {
+    padding: 16px 48px; border-radius: 12px; border: none;
+    background: transparent; color: var(--neon-green);
+    font-family: 'Space Mono', monospace; font-size: 0.8rem;
+    letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer;
+    transition: letter-spacing 0.3s;
+    animation: pulse-btn-text 4s ease-in-out 2.5s infinite;
+  }
+  .btn-start:hover { letter-spacing: 0.28em; }
+  @keyframes pulse-btn-text {
+    0%, 100% { color: rgba(232,238,255,0.4); text-shadow: none; }
+    50%       { color: #e8eeff; text-shadow: 0 0 16px rgba(232,238,255,0.8), 0 0 40px rgba(123,143,255,0.3); }
+  }
+  .app-wrapper { display: none; }
+
+  /* HEADER / FOOTER NAV */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    width: 100%;
+  }
+  .header-center { text-align: center; flex-shrink: 0; }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #d8dce8;
+    text-shadow: 0 0 14px rgba(255,255,255,0.7), 0 0 50px rgba(255,255,255,0.35);
+    line-height: 1;
+  }
+  .logo span {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 20px var(--neon-cyan), 0 0 60px rgba(155,111,255,0.3);
+  }
+  .tagline { display: none; }
+  .tabs { display: contents; }
+  .tab-group, .tab-group-right { display: flex; gap: 24px; align-items: center; }
+  .tab {
+    background: none; border: none;
+    color: var(--muted2);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase;
+    cursor: pointer; transition: color 0.2s; padding: 0; user-select: none;
+  }
+  .tab .tab-icon { display: none; }
+  .tab:hover { color: #d8dce8; }
+  .tab.active { color: #e8eeff; text-shadow: 0 0 14px rgba(155,111,255,0.9), 0 0 30px rgba(155,111,255,0.4); }
+
+  /* LANDING PAGE */
+  .landing {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 40px 24px; position: relative; z-index: 1;
+  }
+  .landing-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3rem, 12vw, 6rem);
+    font-weight: 800; letter-spacing: -2px; color: #d8dce8;
+    line-height: 1; margin-bottom: 8px;
+    animation: pulse-white 4s ease-in-out infinite;
+  }
+  .landing-logo span { color: var(--neon-cyan); animation: pulse-cyan 4s ease-in-out 1.5s infinite; }
+  @keyframes pulse-white {
+    0%, 100% { text-shadow: 0 0 10px rgba(255,255,255,0.4), 0 0 30px rgba(255,255,255,0.15); }
+    50%       { text-shadow: 0 0 20px rgba(255,255,255,0.9), 0 0 60px rgba(255,255,255,0.4), 0 0 100px rgba(200,208,240,0.2); }
+  }
+  @keyframes pulse-cyan {
+    0%, 100% { text-shadow: 0 0 10px rgba(123,143,255,0.4), 0 0 30px rgba(123,143,255,0.15); }
+    50%       { text-shadow: 0 0 20px var(--neon-cyan), 0 0 60px rgba(155,111,255,0.5), 0 0 100px rgba(123,143,255,0.2); }
+  }
+  .landing-sub { font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted2); margin-bottom: 64px; }
+  .landing-about { max-width: 480px; margin-bottom: 56px; }
+  .landing-about p { font-size: 0.85rem; line-height: 1.9; color: #888; margin-bottom: 16px; }
+  .landing-about p:last-child { margin-bottom: 0; }
+  .landing-about strong { color: var(--neon-cyan); font-weight: 700; }
+  .landing-divider { width: 40px; height: 1px; background: rgba(123,143,255,0.3); margin: 0 auto 32px; }
+  .btn-start {
+    padding: 16px 48px; border-radius: 12px; border: none; background: transparent;
+    color: var(--neon-green); font-family: 'Space Mono', monospace;
+    font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase;
+    cursor: pointer; transition: letter-spacing 0.3s;
+    animation: pulse-btn-text 4s ease-in-out 2.5s infinite;
+  }
+  .btn-start:hover { letter-spacing: 0.28em; }
+  @keyframes pulse-btn-text {
+    0%, 100% { color: rgba(232,238,255,0.4); text-shadow: none; }
+    50%       { color: #e8eeff; text-shadow: 0 0 16px rgba(232,238,255,0.8), 0 0 40px rgba(123,143,255,0.3); }
+  }
+  .app-wrapper { display: none; }
 </style>
 </head>
 <body>
 <div class="everything">
 
-  <header>
-    <div class="logo">toki<span>pona</span></div>
-    <div class="tagline">your personal flashcard deck · o kama sona!</div>
-  </header>
-
-  <div class="tabs">
-    <button class="tab active" onclick="switchTab('flash')">⚡ Flash</button>
-    <button class="tab" onclick="switchTab('quiz')">🎯 Quiz</button>
-    <button class="tab" onclick="switchTab('sentences')">💬 Sentences</button>
-    <button class="tab" onclick="switchTab('grammar')">📖 Grammar</button>
-    <button class="tab" onclick="switchTab('add')">＋ Words</button>
+  <!-- LANDING PAGE -->
+  <div class="landing" id="landingPage">
+    <div class="landing-logo">toki<span>pona</span></div>
+    <div class="landing-sub">the language of good</div>
+    <div class="landing-about">
+      <p><strong>toki pona</strong> is a minimalist constructed language created by Canadian linguist Sonja Lang in 2001. It is designed to be as simple as possible — the entire language has only <strong>~137 words</strong>.</p>
+      <div class="landing-divider"></div>
+      <p>The name means <strong>"good language"</strong> or <strong>"simple language"</strong>. By reducing vocabulary to the bare essentials, toki pona encourages speakers to think about the fundamental nature of things and express complex ideas through simple building blocks.</p>
+      <div class="landing-divider"></div>
+      <p>It takes most people just <strong>a few weeks</strong> to learn. This deck will guide you through the core vocabulary, sentences and grammar — one card at a time.</p>
+    </div>
+    <button class="btn-start" onclick="startApp()">o kama sona →</button>
   </div>
+
+  <!-- MAIN APP -->
+  <div class="app-wrapper" id="appWrapper">
 
   <!-- FLASHCARD MODE -->
   <div class="flashcard-section" id="flashSection">
@@ -609,7 +771,18 @@
     </div>
 
     <div id="emptyState" style="text-align:center;padding:48px 24px;background:var(--card-bg);border:1px solid var(--border);border-radius:20px;margin-bottom:20px;">
-      <div style="font-size:2rem;margin-bottom:16px;">🌱</div>
+      <div style="margin-bottom:16px;display:flex;justify-content:center;">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="6" y="6" width="16" height="16" rx="3" stroke="#7b8fff" stroke-width="1.5" fill="none" opacity="0.5"/>
+          <rect x="26" y="6" width="16" height="16" rx="3" stroke="#9b6fff" stroke-width="1.5" fill="none" opacity="0.5"/>
+          <rect x="6" y="26" width="16" height="16" rx="3" stroke="#9b6fff" stroke-width="1.5" fill="none" opacity="0.5"/>
+          <rect x="26" y="26" width="16" height="16" rx="3" stroke="#7b8fff" stroke-width="1.5" fill="none" opacity="0.5"/>
+          <line x1="18" y1="14" x2="30" y2="14" stroke="#7b8fff" stroke-width="1" opacity="0.3"/>
+          <line x1="14" y1="18" x2="14" y2="30" stroke="#9b6fff" stroke-width="1" opacity="0.3"/>
+          <line x1="34" y1="18" x2="34" y2="30" stroke="#9b6fff" stroke-width="1" opacity="0.3"/>
+          <line x1="18" y1="34" x2="30" y2="34" stroke="#7b8fff" stroke-width="1" opacity="0.3"/>
+        </svg>
+      </div>
       <div style="font-family:'Syne',sans-serif;font-size:1.2rem;color:var(--neon-green);margin-bottom:8px;">your deck is empty</div>
       <div style="font-size:0.72rem;color:var(--muted2);">go to <strong style="color:var(--text)">＋ Words</strong> to add your first words!</div>
     </div>
@@ -824,12 +997,12 @@
         <div class="card-inner" id="wordDeckCardInner">
           <div class="card-face card-front">
             <div class="card-label">toki pona</div>
-            <div class="card-word" id="wordDeckFront" style="color:var(--neon-pink);text-shadow:0 0 20px var(--neon-pink);"></div>
+            <div class="card-word" id="wordDeckFront" style="color:var(--neon-pink);text-shadow:0 0 20px var(--neon-pink);font-size:clamp(1rem,2.5vw,1.3rem);"></div>
             <div class="card-hint">tap to reveal meaning</div>
           </div>
           <div class="card-face card-back">
             <div class="card-label">english</div>
-            <div class="card-word" id="wordDeckBack" style="color:var(--neon-cyan);text-shadow:0 0 20px var(--neon-cyan);font-size:clamp(1.6rem,6vw,2.4rem);"></div>
+            <div class="card-word" id="wordDeckBack" style="color:var(--neon-cyan);text-shadow:0 0 20px var(--neon-cyan);font-size:clamp(0.75rem,1.8vw,0.95rem);"></div>
             <div class="card-category" id="wordDeckCategory"></div>
           </div>
         </div>
@@ -851,9 +1024,33 @@
     <div class="word-list" id="wordList"></div>
   </div>
 
+  </div> <!-- end app-wrapper -->
+
+  <footer id="appFooter" style="display:none;position:fixed;bottom:0;left:0;right:0;padding:16px 28px;z-index:100;background:linear-gradient(to top, #030303 70%, transparent);border-top:1px solid rgba(255,255,255,0.04);">
+    <header>
+      <div class="tabs">
+        <div class="tab-group">
+          <button class="tab active" onclick="switchTab('flash')">flash</button>
+          <button class="tab" onclick="switchTab('quiz')">quiz</button>
+        </div>
+      </div>
+      <div class="header-center">
+        <div class="logo">toki<span>pona</span></div>
+        <div class="tagline">your personal flashcard deck · o kama sona!</div>
+      </div>
+      <div class="tabs">
+        <div class="tab-group-right">
+          <button class="tab" onclick="switchTab('sentences')">sentence</button>
+          <button class="tab" onclick="switchTab('grammar')">grammar</button>
+          <button class="tab" onclick="switchTab('add')">word</button>
+        </div>
+      </div>
+    </header>
+  </footer>
+
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" style="display:none;"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -887,6 +1084,15 @@
     words = w || [];
     sentences = s || [];
     rules = r || [];
+    // fallback for preview/offline
+    if (words.length === 0 && sentences.length === 0 && rules.length === 0) {
+      words = [
+        { id:'p1', toki:'pona', meaning:'good, simple, peace', category:'adjective' },
+        { id:'p2', telo:'telo', toki:'telo', meaning:'water, liquid, fluid', category:'noun' },
+        { id:'p3', toki:'jan', meaning:'person, human, someone', category:'noun' },
+        { id:'p4', toki:'moku', meaning:'food, to eat, to drink', category:'verb' },
+      ];
+    }
     initDeck();
     renderWordList();
     renderSentenceList();
@@ -936,9 +1142,10 @@
     document.getElementById('cardWord').textContent = w.front;
     document.getElementById('cardWord').style.color = typeColors[w.type] || 'var(--neon-green)';
     document.getElementById('cardWord').style.textShadow = `0 0 20px ${typeColors[w.type]}`;
-    document.getElementById('cardWord').style.fontSize = w.type === 'word' ? 'clamp(2.5rem, 10vw, 4rem)' : 'clamp(1.1rem, 3.5vw, 1.6rem)';
+    document.getElementById('cardWord').style.fontSize = w.type === 'word' ? 'clamp(1.1rem, 3vw, 1.5rem)' : 'clamp(0.8rem, 2vw, 1rem)';
     document.getElementById('cardWord').style.lineHeight = w.type === 'word' ? '1' : '1.5';
     document.getElementById('cardMeaning').textContent = w.back;
+    document.getElementById('cardMeaning').style.fontSize = 'clamp(0.85rem, 2.5vw, 1.1rem)';
     document.getElementById('cardCategory').textContent = w.category;
     document.getElementById('cardInner').classList.remove('flipped');
     document.getElementById('answerBtns').style.display = 'none';
@@ -1509,6 +1716,14 @@
   }
 
   // ── TABS ────────────────────────────────────────────────
+  function startApp() {
+    document.getElementById('landingPage').style.display = 'none';
+    document.getElementById('appWrapper').style.display = 'block';
+    document.getElementById('appFooter').style.display = 'block';
+    document.getElementById('toast').style.display = 'block';
+    loadAll();
+  }
+
   function switchTab(tab) {
     document.querySelectorAll('.tab').forEach((t, i) => {
       t.classList.toggle('active', ['flash','quiz','sentences','grammar','add'][i] === tab);
@@ -1548,7 +1763,6 @@
 
   // ── INIT ────────────────────────────────────────────────
   randomGridColor();
-  loadAll();
 </script>
 </body>
 </html>
