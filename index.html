@@ -139,7 +139,7 @@
   .card-scene {
     perspective: 1000px;
     margin-bottom: 20px;
-    margin-top: 32px;
+    margin-top: 140px;
     cursor: pointer;
   }
 
@@ -193,9 +193,9 @@
   }
 
   .card-word {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Space Mono', monospace;
     font-size: clamp(1.2rem, 4vw, 1.8rem);
-    font-weight: 800;
+    font-weight: 700;
     color: var(--neon-green);
     text-shadow: 0 0 20px var(--neon-green);
     letter-spacing: -1px;
@@ -498,6 +498,35 @@
   }
   .btn-delete:hover { color: var(--neon-pink); }
 
+  /* DECK CONFIG */
+  .deck-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 16px 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    color: var(--muted2);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .deck-toggle.active {
+    border-color: rgba(123,143,255,0.4);
+    color: var(--neon-cyan);
+    box-shadow: 0 0 12px rgba(123,143,255,0.08);
+  }
+  .deck-toggle .toggle-count {
+    font-size: 0.6rem;
+    color: var(--muted);
+  }
+  .deck-toggle.active .toggle-count { color: var(--neon-cyan); }
+
   /* COMPLETION */
   .completion {
     text-align: center;
@@ -774,6 +803,29 @@
   <!-- FLASHCARD MODE -->
   <div class="flashcard-section" id="flashSection">
 
+    <!-- DECK CONFIG SCREEN -->
+    <div id="deckConfig" style="padding:40px 0;">
+      <div style="font-size:0.55rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--muted2);text-align:center;margin-bottom:28px;">build your deck</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:36px;">
+        <button class="deck-toggle" id="toggleWords" onclick="toggleFilter(this,'words')">
+          <span>words</span>
+          <span class="toggle-count" id="countWords">0 cards</span>
+        </button>
+        <button class="deck-toggle" id="toggleSentences" onclick="toggleFilter(this,'sentences')">
+          <span>sentences</span>
+          <span class="toggle-count" id="countSentences">0 cards</span>
+        </button>
+        <button class="deck-toggle" id="toggleGrammar" onclick="toggleFilter(this,'grammar')">
+          <span>grammar</span>
+          <span class="toggle-count" id="countGrammar">0 cards</span>
+        </button>
+      </div>
+      <button class="btn-start" onclick="startDeck()">start →</button>
+    </div>
+
+    <!-- DECK AREA -->
+    <div id="deckArea" style="display:none;">
+
     <div class="progress-wrap">
       <div class="progress-info">
         <span id="progressText">card 1 of 20</span>
@@ -831,20 +883,24 @@
 
     <div class="flip-hint" id="flipHint">↑ tap card to flip ↑</div>
 
+    <div id="navBtns" class="answer-btns">
+      <button class="btn" onclick="prevCard()" id="prevBtn" style="color:var(--neon-cyan);text-shadow:0 0 20px var(--neon-cyan);">← prev</button>
+      <button class="btn" onclick="nextCard()" id="skipBtn" style="color:var(--neon-cyan);text-shadow:0 0 20px var(--neon-cyan);">skip →</button>
+    </div>
+
     <div class="answer-btns" id="answerBtns" style="display:none">
       <button class="btn btn-dontknow" onclick="answer(false)">✗ still learning</button>
       <button class="btn btn-know" onclick="answer(true)">✓ i know it</button>
     </div>
 
-    <button class="btn-next" onclick="nextCard()" id="skipBtn">skip →</button>
-
     <div class="completion" id="completion">
       <div class="completion-emoji">🌟</div>
       <div class="completion-title">pona!</div>
       <div class="completion-sub" id="completionSub">you reviewed all the cards</div>
-      <button class="btn-restart" onclick="restart()">start over</button>
+      <button class="btn-restart" onclick="showDeckConfig()">start over</button>
     </div>
 
+    </div> <!-- end deckArea -->
   </div>
 
   <!-- QUIZ MODE -->
@@ -1081,7 +1137,6 @@
       <button class="tab" onclick="switchTab('grammar')">grammar</button>
       <button class="tab" onclick="switchTab('add')">word</button>
     </div>
-    <div class="mobile-title">toki<span>pona</span></div>
   </footer>
 
 </div>
@@ -1129,24 +1184,57 @@
         { id:'p4', toki:'moku', meaning:'food, to eat, to drink', category:'verb' },
       ];
     }
-    initDeck();
     renderWordList();
     renderSentenceList();
     renderGrammarList();
+    showDeckConfig();
     showToast(`loaded ${words.length} words & ${sentences.length} sentences 🌱`);
+  }
+
+  // ── DECK CONFIG ─────────────────────────────────────────
+  let deckFilters = { words: false, sentences: false, grammar: false };
+
+  function toggleFilter(btn, type) {
+    deckFilters[type] = !deckFilters[type];
+    btn.classList.toggle('active', deckFilters[type]);
+    const anyActive = Object.values(deckFilters).some(v => v);
+    const startBtn = document.querySelector('#deckConfig .btn-start');
+    startBtn.disabled = !anyActive;
+    startBtn.style.opacity = anyActive ? '' : '0.3';
+    startBtn.style.cursor = anyActive ? 'pointer' : 'not-allowed';
+  }
+
+  function showDeckConfig() {
+    deckFilters = { words: false, sentences: false, grammar: false };
+    ['toggleWords','toggleSentences','toggleGrammar'].forEach(id => document.getElementById(id).classList.remove('active'));
+    const startBtn = document.querySelector('#deckConfig .btn-start');
+    startBtn.disabled = true;
+    startBtn.style.opacity = '0.3';
+    startBtn.style.cursor = 'not-allowed';
+    document.getElementById('deckConfig').style.display = 'block';
+    document.getElementById('deckArea').style.display = 'none';
+    document.getElementById('countWords').textContent = words.length + ' cards';
+    document.getElementById('countSentences').textContent = sentences.length + ' cards';
+    document.getElementById('countGrammar').textContent = rules.length + ' cards';
+  }
+
+  function startDeck() {
+    document.getElementById('deckConfig').style.display = 'none';
+    document.getElementById('deckArea').style.display = 'block';
+    initDeck();
   }
 
   // ── FLASHCARD ───────────────────────────────────────────
   function initDeck() {
     const allCards = [
-      ...words.map(w => ({ type: 'word', front: w.toki, back: w.meaning, category: w.category })),
-      ...sentences.map(s => ({ type: 'sentence', front: s.toki, back: s.translation, category: 'sentence' })),
-      ...rules.map(r => ({ type: 'rule', front: r.rule, back: r.translation, category: 'rule' })),
+      ...(deckFilters.words ? words.map(w => ({ type: 'word', front: w.toki, back: w.meaning, category: w.category })) : []),
+      ...(deckFilters.sentences ? sentences.map(s => ({ type: 'sentence', front: s.toki, back: s.translation, category: 'sentence' })) : []),
+      ...(deckFilters.grammar ? rules.map(r => ({ type: 'rule', front: r.rule, back: r.translation, category: 'rule' })) : []),
     ];
     if (allCards.length === 0) {
       document.getElementById('cardScene').style.display = 'none';
       document.getElementById('flipHint').style.display = 'none';
-      document.getElementById('skipBtn').style.display = 'none';
+      document.getElementById('navBtns').style.display = 'none';
       document.getElementById('answerBtns').style.display = 'none';
       document.getElementById('progressText').textContent = 'no cards yet';
       document.getElementById('knownCount').textContent = '';
@@ -1160,7 +1248,7 @@
     if (empty) empty.style.display = 'none';
     document.getElementById('cardScene').style.display = '';
     document.getElementById('flipHint').style.display = '';
-    document.getElementById('skipBtn').style.display = '';
+    document.getElementById('navBtns').style.display = '';
     deck = shuffle(allCards);
     currentIndex = 0;
     known = 0;
@@ -1185,9 +1273,10 @@
     document.getElementById('cardCategory').textContent = w.category;
     document.getElementById('cardInner').classList.remove('flipped');
     document.getElementById('answerBtns').style.display = 'none';
-    document.getElementById('skipBtn').style.display = '';
+    document.getElementById('navBtns').style.display = '';
     document.getElementById('flipHint').style.display = '';
     isFlipped = false;
+    document.getElementById('prevBtn').disabled = currentIndex === 0;
     const pct = (currentIndex / deck.length) * 100;
     document.getElementById('progressFill').style.width = pct + '%';
     document.getElementById('progressText').textContent = `card ${currentIndex + 1} of ${deck.length}`;
@@ -1206,11 +1295,11 @@
     document.getElementById('cardInner').classList.toggle('flipped', isFlipped);
     if (isFlipped) {
       document.getElementById('answerBtns').style.display = 'grid';
-      document.getElementById('skipBtn').style.display = 'none';
+      document.getElementById('navBtns').style.display = 'none';
       document.getElementById('flipHint').style.display = 'none';
     } else {
       document.getElementById('answerBtns').style.display = 'none';
-      document.getElementById('skipBtn').style.display = '';
+      document.getElementById('navBtns').style.display = '';
       document.getElementById('flipHint').style.display = '';
     }
   }
@@ -1223,11 +1312,12 @@
   }
 
   function nextCard() { currentIndex++; updateStats(); updateCard(); }
+  function prevCard() { if (currentIndex > 0) { currentIndex--; isFlipped = false; updateStats(); updateCard(); } }
 
   function showCompletion() {
     document.getElementById('cardScene').style.display = 'none';
     document.getElementById('flipHint').style.display = 'none';
-    document.getElementById('skipBtn').style.display = 'none';
+    document.getElementById('navBtns').style.display = 'none';
     document.getElementById('answerBtns').style.display = 'none';
     document.getElementById('progressFill').style.width = '100%';
     document.getElementById('completionSub').textContent =
@@ -1774,6 +1864,7 @@
     document.getElementById('sentencesSection').style.display = tab === 'sentences' ? 'block' : 'none';
     document.getElementById('grammarSection').style.display = tab === 'grammar' ? 'block' : 'none';
     document.getElementById('addSection').style.display = tab === 'add' ? 'block' : 'none';
+    if (tab === 'flash') showDeckConfig();
     if (tab === 'quiz') initQuiz();
     if (tab === 'add') { renderWordList(); if (words.length > 0) initWordDeck(); }
     if (tab === 'sentences') { renderSentenceList(); if (sentences.length > 0) initSentenceDeck(); }
